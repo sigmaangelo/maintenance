@@ -1,6 +1,6 @@
 import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
 
-const ALLOWED_HOST = "sigma.com"; // change if needed
+const ALLOWED_HOST = "https://sigmaangelo-maintenance-61.deno.dev/"; // change if needed
 const SECRET = "12345"; // your secret token/password
 
 Deno.serve(async (req) => {
