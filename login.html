@@ -1,14 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-</head>
-<body>
-  <h1>Enter Password</h1>
-  <form onsubmit="window.open(this.action + '?pass=' + this.pass.value); return false;">
-    <input type="password" name="pass" placeholder="Password" required />
-    <button type="submit">Play</button>
-  </form>
-</body>
-</html>
+<form onsubmit="openGame(this); return false;">
+  <input type="password" name="pass" placeholder="Password" required />
+  <select name="game">
+    <option value="/games/slope/index.html">Slope</option>
+    <option value="/games/ovo3d/index.html">Ovo3D</option>
+    <option value="/games/1v1lol/index.html">1v1LOL</option>
+  </select>
+  <button type="submit">Play</button>
+</form>
+
+<script>
+function openGame(form) {
+  const pass = form.pass.value;
+  const game = form.game.value;
+  // open a new window with the password attached as query param
+  window.open(`${game}?pass=${encodeURIComponent(pass)}`, "_blank");
+}
+</script>
