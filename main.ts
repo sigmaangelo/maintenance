@@ -1,11 +1,9 @@
 Deno.serve(async (req) => {
   const url = new URL(req.url)
 
-  // When someone visits your site root "/"
   if (url.pathname === "/") {
     try {
       const file = await Deno.readTextFile(".test.html")
-
       return new Response(file, {
         headers: { "content-type": "text/html" },
       })
@@ -14,6 +12,5 @@ Deno.serve(async (req) => {
     }
   }
 
-  // Everything else is blocked
   return new Response("Forbidden", { status: 403 })
 })
