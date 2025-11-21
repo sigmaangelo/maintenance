@@ -1,49 +1,25 @@
-import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.200.0/http/server.ts";
 
-// ⚠️ CHANGE TO YOUR REAL DOMAIN
-const ALLOWED_HOST = "sigmaangelo-maintenance-61.deno.dev";
+const PASSWORD = "your-secret-password";
 
 serve(async (req) => {
   const url = new URL(req.url);
-  const path = url.pathname;
 
-  // Only allow your domain
-  const host = req.headers.get("host") || "";
-  if (!host.includes(ALLOWED_HOST)) {
-    return new Response("hi", { status: 403 });
+  // Allow login page
+  if (url.pathname === "/login.html" || url.pathname === "/") {
+    return fetch(req);
   }
 
-  // Block folder access (/anything/)
-  if (path.endsWith("/")) {
-    return new Response("Forbidden", { status: 403 });
+  // Check password
+  const submittedPass = url.searchParams.get("pass");
+  if (submittedPass !== PASSWORD) {
+    return Response.redirect(new URL("/login.html", req.url));
   }
 
-  // Block file extensions
-  if (
-    path.endsWith(".html") ||
-    path.endsWith(".js") ||
-    path.endsWith(".css") ||
-    path.endsWith(".json") ||
-    path.startsWith("/.")
-  ) {
-    return new Response("Forbidden", { status: 403 });
-  }
-
-  // Convert /test -> test.html
-  const filePath =
-    path === "/" ? "./index.html" : `./${path.slice(1)}.html`;
-
+  // Serve game file
   try {
-    const file = await Deno.readFile(filePath);
-
-    return new Response(file, {
-      headers: {
-        "Content-Type": "text/html",
-        "Cache-Control": "no-store, no-cache, must-revalidate",
-        "Pragma": "no-cache",
-      },
-    });
+    return await fetch(new URL("." + url.pathname, import.meta.url));
   } catch {
-    return new Response("404 - Not Found", { status: 404 });
+    return new Response("404 Not Found", { status: 404 });
   }
 });
