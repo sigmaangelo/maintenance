@@ -10,7 +10,7 @@ serve(async (req) => {
   // Only allow your domain
   const host = req.headers.get("host") || "";
   if (!host.includes(ALLOWED_HOST)) {
-    return new Response("Forbidden", { status: 403 });
+    return new Response("hi", { status: 403 });
   }
 
   // Block folder access (/anything/)
