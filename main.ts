@@ -9,6 +9,23 @@ Deno.serve(async (req) => {
   // ---- 1. BLOCK hotlinking / external access ----
   const referer = req.headers.get("referer") || "";
   const origin = req.headers.get("origin") || "";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { serveFile } from "https://deno.land/std@0.224.0/http/file_server.ts";
+
+serve(async (req) => {
+  const url = new URL(req.url);
+  let path = `.${url.pathname}`;
+
+  if (path === "./") {
+    path = "./.hidden.html";
+  }
+
+  try {
+    return await serveFile(req, path);
+  } catch {
+    return new Response("404 - File Not Found", { status: 404 });
+  }
+});
 
   if (
     !referer.includes(ALLOWED_HOST) &&
