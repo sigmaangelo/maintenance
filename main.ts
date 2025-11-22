@@ -1,19 +1,18 @@
 import { serve } from "https://deno.land/std@0.200.0/http/server.ts";
 import { getCookies, setCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
 
-const PASSWORD = "gaming123"; // Your game password
+const PASSWORD = "gaming123";
 
 serve(async (req) => {
   const url = new URL(req.url);
   const pathname = url.pathname === "/" ? "/login.html" : url.pathname;
   const cookies = getCookies(req.headers);
 
-  // Handle POST from login form
+  // Handle POST login
   if (pathname === "/login.html" && req.method === "POST") {
     try {
       const formData = await req.formData();
       const pass = formData.get("pass");
-
       if (pass === PASSWORD) {
         const headers = new Headers();
         setCookie(headers, {
@@ -23,12 +22,12 @@ serve(async (req) => {
           maxAge: 3600,
           path: "/",
         });
+        // Redirect to first game
         return Response.redirect(new URL("/games/slope/index.html", req.url), { headers });
       } else {
         return Response.redirect(new URL("/login.html", req.url));
       }
-    } catch (e) {
-      console.error("Error parsing form data:", e);
+    } catch {
       return Response.redirect(new URL("/login.html", req.url));
     }
   }
@@ -37,10 +36,7 @@ serve(async (req) => {
   if (pathname === "/login.html") {
     try {
       const file = await Deno.readFile(`.${pathname}`);
-      return new Response(file, {
-        status: 200,
-        headers: { "content-type": "text/html" },
-      });
+      return new Response(file, { status: 200, headers: { "content-type": "text/html" } });
     } catch {
       return new Response("Login page not found", { status: 404 });
     }
@@ -49,6 +45,7 @@ serve(async (req) => {
   // Protect game folders
   if (pathname.startsWith("/games/")) {
     if (cookies.game_session !== "valid") {
+      // Redirect to PageCrypt login if no valid cookie
       return Response.redirect(new URL("/login.html", req.url));
     }
 
@@ -66,6 +63,6 @@ serve(async (req) => {
     }
   }
 
-  // Redirect everything else to login page
+  // All other URLs redirect to login
   return Response.redirect(new URL("/login.html", req.url));
 });
