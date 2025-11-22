@@ -1,35 +1,106 @@
-function openGame(url) {
-  const win = window.open("about:blank", "_blank");
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Game Menu</title>
 
-  if (!win) {
-    alert("Popup blocked. Allow popups.");
-    return;
+<style>
+  body {
+    background: black;
+    color: #00ff00;
+    font-family: monospace;
+    text-align: center;
+    padding: 40px;
   }
 
-  win.document.open();
-  win.document.write(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Game</title>
-        <style>
-          html, body {
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-          }
-          iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-          }
-        </style>
-      </head>
-      <body>
-        <iframe src="${url}" allowfullscreen></iframe>
-      </body>
-    </html>
-  `);
-  win.document.close();
-}
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  .games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+
+  button {
+    padding: 20px;
+    background: #002200;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #004400;
+  }
+
+  .note {
+    margin-top: 40px;
+    opacity: 0.6;
+    font-size: 14px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>🎮 Game Menu</h1>
+<p>Click a game to play</p>
+
+<div class="games">
+  <button onclick="openGame('/games/slope/index.html')">Play Slope</button>
+  <button onclick="openGame('/games/ovo/index.html')">Play OvO</button>
+  <button onclick="openGame('/games/bitplanes/index.html')">Play Bit Planes</button>
+</div>
+
+<div class="note">
+  Games open in a cloaked window
+</div>
+
+<script>
+  function openGame(url) {
+    const win = window.open("about:blank", "_blank");
+
+    if (!win) {
+      alert("Popup blocked. Allow popups for this site.");
+      return;
+    }
+
+    win.document.open();
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Game</title>
+          <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
+              background: black;
+            }
+
+            iframe {
+              border: none;
+              width: 100%;
+              height: 100%;
+            }
+          </style>
+        </head>
+        <body>
+          <iframe src="${url}" allowfullscreen></iframe>
+        </body>
+      </html>
+    `);
+
+    win.document.close();
+  }
+</script>
+
+</body>
+</html>
