@@ -4,19 +4,15 @@ serve(async (req) => {
   const url = new URL(req.url);
   const path = url.pathname;
 
-  const dest = req.headers.get("sec-fetch-dest"); // "document" or "iframe"
+  const dest = req.headers.get("sec-fetch-dest");
   const referer = req.headers.get("referer");
 
-  // 🔒 BLOCK direct access to games in browser
   if (path.startsWith("/games")) {
-
-    // Only allow inside iframe AND from menu.html
     if (dest !== "iframe" || !referer?.includes("/menu.html")) {
       return Response.redirect(`${url.origin}/menu.html`, 302);
     }
   }
 
-  // 🔒 Block folder viewing
   if (!path.includes(".")) {
     return new Response("404 Not Found", { status: 404 });
   }
