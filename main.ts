@@ -11,12 +11,16 @@ serve(async (req) => {
 
   console.log("Request:", path);
 
-  // 🔒 BLOCK ALL /games ROUTES IF NOT LOGGED IN
+  // ---------------------------
+  // 1️⃣ BLOCK /games/* IF NOT AUTHENTICATED
+  // ---------------------------
   if (path.startsWith("/games") && !authenticated) {
     return new Response("403 - Forbidden", { status: 403 });
   }
 
-  // 🔐 HANDLE LOGIN
+  // ---------------------------
+  // 2️⃣ HANDLE PASSWORD LOGIN
+  // ---------------------------
   if (path === "/login" && req.method === "POST") {
     const form = await req.formData();
     const password = form.get("password");
@@ -32,28 +36,32 @@ serve(async (req) => {
     return new Response("WRONG", { status: 401 });
   }
 
-  // ✅ SERVE FILES
-  const filePath = path === "/" ? "/index.html" : path;
+  // ---------------------------
+  // 3️⃣ SERVE FILES
+  // ---------------------------
+  // if path ends with /, append index.html
+  const filePath = path.endsWith("/") ? `.${path}index.html` : `.${path}`;
 
   try {
-    const file = await Deno.readFile(`.${filePath}`);
+    const file = await Deno.readFile(filePath);
     const contentType = getType(filePath);
 
     return new Response(file, {
-      headers: {
-        "content-type": contentType,
-      },
+      headers: { "content-type": contentType },
     });
   } catch {
     return new Response("404 not found", { status: 404 });
   }
 });
 
+// ---------------------------
+// 4️⃣ HELPER: content-type
+// ---------------------------
 function getType(path: string) {
   if (path.endsWith(".html")) return "text/html";
   if (path.endsWith(".js")) return "application/javascript";
   if (path.endsWith(".css")) return "text/css";
   if (path.endsWith(".png")) return "image/png";
-  if (path.endsWith(".jpg")) return "image/jpeg";
+  if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
   return "text/plain";
 }
