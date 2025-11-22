@@ -1,47 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+<meta charset="UTF-8">
+<title>Login</title>
 
-  <!-- PageCrypt script -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pagecrypt/1.1.0/pagecrypt.min.js"></script>
+<style>
+  body {
+    background: black;
+    color: #00ff00;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
 
-  <style>
-    body {
-      background: black;
-      color: #00ff00;
-      font-family: monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    #content {
-      display: none;
-      text-align: center;
-    }
-  </style>
+  .box {
+    padding: 40px;
+    border: 2px solid #00ff00;
+  }
+</style>
 </head>
 <body>
 
-<div id="content">
+<div class="box">
   <h1>✅ Access Granted</h1>
-  <p>Redirecting to game menu...</p>
-
-  <script>
-    setTimeout(() => {
-      window.location.href = "/menu.html";
-    }, 1500);
-  </script>
+  <p>Redirecting to games...</p>
 </div>
 
 <script>
-  // This makes PageCrypt run on this element
-  pageCrypt.load("content", {
-    remember: false
-  });
+  // Change delay if you want (currently 1.5 seconds)
+  setTimeout(() => {
+    window.location.href = "/menu.html";
+  }, 1500);
 </script>
 
 </body>
