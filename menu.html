@@ -38,8 +38,8 @@
     background: #004400;
   }
 </style>
-
 </head>
+
 <body>
 
 <h1>🎮 Game Menu</h1>
@@ -52,38 +52,41 @@
 </div>
 
 <script>
-  const PASS = "gaming123"; // must match main.ts
+  function openGame(url) {
+    const win = window.open("about:blank", "_blank");
 
-  function openGame(path) {
-    const newTab = window.open("about:blank");
+    if (!win) {
+      alert("Popup blocked. Allow popups for this site.");
+      return;
+    }
 
-    // Inject a simple loading screen (optional)
-    newTab.document.write(`
+    win.document.open();
+    win.document.write(`
+      <!DOCTYPE html>
       <html>
         <head>
-          <title>Loading...</title>
+          <title>Game</title>
           <style>
-            body {
+            html, body {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
               background: black;
-              color: #00ff00;
-              font-family: monospace;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              height: 100vh;
+            }
+            iframe {
+              width: 100%;
+              height: 100%;
+              border: none;
             }
           </style>
         </head>
         <body>
-          <h1>Loading game...</h1>
+          <iframe src="${url}" allowfullscreen></iframe>
         </body>
       </html>
     `);
-
-    // Then load your protected game
-    setTimeout(() => {
-      newTab.location = path + "?pass=" + PASS;
-    }, 800);
+    win.document.close();
   }
 </script>
 
