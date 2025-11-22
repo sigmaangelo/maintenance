@@ -1,0 +1,14 @@
+<h1>Games</h1>
+
+<button onclick="openGame('/games/slope/index.html')">Play Slope</button>
+<button onclick="openGame('/games/ovo/index.html')">Play OvO</button>
+<button onclick="openGame('/games/bitplanes/index.html')">Play BitPlanes</button>
+
+<script>
+  function openGame(path) {
+    const pass = "gaming123"; // server checks this
+
+    const win = window.open("about:blank");
+    win.location = path + "?pass=" + pass;
+  }
+</script>
