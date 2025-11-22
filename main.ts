@@ -4,21 +4,21 @@ import { serveFile } from "https://deno.land/std/http/file_server.ts";
 serve(async (req) => {
   try {
     const url = new URL(req.url);
-    let pathname = url.pathname;
+    let pathname = decodeURIComponent(url.pathname);
 
-    // ROOT -> login
+    // Root → login
     if (pathname === "/") {
       return serveFile(req, "./login.html");
     }
 
-    // Allow login always
+    // Always allow login
     if (pathname === "/login.html") {
       return serveFile(req, "./login.html");
     }
 
-    // 🔐 BLOCK direct menu access
+    // Protect menu
     if (pathname === "/menu.html") {
-      const referer = req.headers.get("referer") ?? "";
+      const referer = req.headers.get("referer") || "";
 
       if (!referer.includes("/login.html")) {
         return Response.redirect("/login.html", 302);
@@ -27,26 +27,37 @@ serve(async (req) => {
       return serveFile(req, "./menu.html");
     }
 
-    // ✅ FOLDER SUPPORT (/games/slope/ → /games/slope/index.html)
-    if (pathname.startsWith("/games/")) {
-      const referer = req.headers.get("referer") ?? "";
+    // Handle /games/
+    if (pathname.startsWith("/games")) {
+      const referer = req.headers.get("referer") || "";
 
       if (!referer.includes("/menu.html")) {
         return new Response("403 Forbidden", { status: 403 });
       }
 
-      // If ending with / → add index.html
+      // If folder, auto add index.html
       if (pathname.endsWith("/")) {
         pathname += "index.html";
       }
 
-      return serveFile(req, `.${pathname}`);
+      // If no extension, assume folder
+      else if (!pathname.includes(".")) {
+        pathname += "/index.html";
+      }
+
+      const filePath = `.${pathname}`;
+
+      try {
+        return await serveFile(req, filePath);
+      } catch {
+        return new Response("404 - Game not found", { status: 404 });
+      }
     }
 
     return new Response("404 - Not Found", { status: 404 });
 
   } catch (err) {
-    console.error(err);
-    return new Response("500 Server Error", { status: 500 });
+    console.error("CRASH:", err);
+    return new Response("Internal Server Error", { status: 500 });
   }
 });
