@@ -12,9 +12,9 @@ serve(async (req) => {
   console.log("Request:", path);
 
   // ---------------------------
-  // 1️⃣ BLOCK /games/* IF NOT AUTHENTICATED
+  // 1️⃣ PROTECT ALL /games PATHS INCLUDING /games/ ITSELF
   // ---------------------------
-  if (path.startsWith("/games") && !authenticated) {
+  if ((path === "/games" || path.startsWith("/games/")) && !authenticated) {
     return new Response("403 - Forbidden", { status: 403 });
   }
 
@@ -39,7 +39,6 @@ serve(async (req) => {
   // ---------------------------
   // 3️⃣ SERVE FILES
   // ---------------------------
-  // if path ends with /, append index.html
   const filePath = path.endsWith("/") ? `.${path}index.html` : `.${path}`;
 
   try {
