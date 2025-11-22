@@ -14,7 +14,6 @@
     align-items: center;
     height: 100vh;
     text-align: center;
-    margin: 0;
   }
 
   .box {
@@ -31,13 +30,10 @@
 </div>
 
 <script>
-  // Set session flag so menu.html knows user came through here
-  sessionStorage.setItem("authorized", "true");
-
-  // Redirect normally (no about:blank)
+  // IMPORTANT: direct redirect (keeps referer = /login.html)
   setTimeout(() => {
     window.location.href = "/menu.html";
-  }, 1200);
+  }, 1500);
 </script>
 
 </body>
