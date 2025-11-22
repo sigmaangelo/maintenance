@@ -1,46 +1,39 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 
-const PASSWORD = "gaming123";
-
-const allowedGames = [
-  "/games/slope/index.html",
-  "/games/ovo/index.html",
-  "/games/bitplanes/index.html",
-];
-
 serve(async (req) => {
   const url = new URL(req.url);
   const path = url.pathname;
-  const pass = url.searchParams.get("pass");
 
-  // BLOCK direct access to games
-  if (path.startsWith("/games/")) {
-    if (pass !== PASSWORD || !allowedGames.includes(path)) {
-      return Response.redirect("/login.html", 302);
-    }
+  const dest = req.headers.get("sec-fetch-dest"); // "document" or "iframe"
+  const referer = req.headers.get("referer");
 
-    try {
-      const file = await Deno.readFile(`.${path}`);
-      return new Response(file, {
-        headers: { "content-type": "text/html" },
-      });
-    } catch {
-      return new Response("Game not found", { status: 404 });
+  // 🔒 BLOCK direct access to games in browser
+  if (path.startsWith("/games")) {
+
+    // Only allow inside iframe AND from menu.html
+    if (dest !== "iframe" || !referer?.includes("/menu.html")) {
+      return Response.redirect(`${url.origin}/menu.html`, 302);
     }
   }
 
-  // Serve normal files
-  try {
-    const file = await Deno.readFile(`.${path === "/" ? "/login.html" : path}`);
-    const contentType =
-      path.endsWith(".css") ? "text/css" :
-      path.endsWith(".js")  ? "application/javascript" :
-      "text/html";
+  // 🔒 Block folder viewing
+  if (!path.includes(".")) {
+    return new Response("404 Not Found", { status: 404 });
+  }
 
-    return new Response(file, {
-      headers: { "content-type": contentType },
-    });
+  try {
+    const file = await Deno.readFile(`.${path}`);
+
+    const type = path.endsWith(".html") ? "text/html"
+      : path.endsWith(".js") ? "application/javascript"
+      : path.endsWith(".css") ? "text/css"
+      : path.endsWith(".png") ? "image/png"
+      : path.endsWith(".jpg") ? "image/jpeg"
+      : "application/octet-stream";
+
+    return new Response(file, { headers: { "content-type": type } });
+
   } catch {
-    return Response.redirect("/login.html", 302);
+    return new Response("404 Not Found", { status: 404 });
   }
 });
