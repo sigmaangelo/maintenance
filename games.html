@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Hub</title>
+  <style>
+    body {
+      background: black;
+      color: #0f0;
+      text-align: center;
+      font-family: monospace;
+    }
+    iframe {
+      width: 800px;
+      height: 600px;
+      border: none;
+      margin-top: 20px;
+    }
+    button {
+      background: #0f0;
+      color: black;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>GAME HUB</h1>
+
+<!-- Add more buttons for each game -->
+<button onclick="play('slope')">Play Slope</button>
+
+<iframe id="gameFrame"></iframe>
+
+<script>
+function play(game) {
+  // Loads the game inside the iframe so URL stays cloaked
+  document.getElementById("gameFrame").src = `/games/${game}/index.html`;
+}
+</script>
+
+</body>
+</html>
