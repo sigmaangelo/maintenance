@@ -1,71 +1,46 @@
-import { serve } from "https://deno.land/std@0.200.0/http/server.ts";
-import { getCookies, setCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
+import { serve } from "https://deno.land/std/http/server.ts";
 
-const PASSWORD = "gaming123"; // game password
+const PASSWORD = "gaming123";
+
+const allowedGames = [
+  "/games/slope/index.html",
+  "/games/ovo/index.html",
+  "/games/bitplanes/index.html",
+];
 
 serve(async (req) => {
   const url = new URL(req.url);
-  const pathname = url.pathname === "/" ? "/login.html" : url.pathname;
-  const cookies = getCookies(req.headers);
+  const path = url.pathname;
+  const pass = url.searchParams.get("pass");
 
-  // Handle POST login form
-  if (pathname === "/login.html" && req.method === "POST") {
-    try {
-      const formData = await req.formData();
-      const pass = formData.get("pass");
-
-      if (pass === PASSWORD) {
-        const headers = new Headers();
-        setCookie(headers, {
-          name: "game_session",
-          value: "valid",
-          httpOnly: true,
-          path: "/",
-          maxAge: 3600, // 1 hour
-        });
-        // redirect to first game automatically
-        return Response.redirect(new URL("/games/slope/index.html", req.url), { headers });
-      } else {
-        return Response.redirect(new URL("/login.html", req.url));
-      }
-    } catch {
-      return Response.redirect(new URL("/login.html", req.url));
+  // BLOCK direct access to games
+  if (path.startsWith("/games/")) {
+    if (pass !== PASSWORD || !allowedGames.includes(path)) {
+      return Response.redirect("/login.html", 302);
     }
-  }
 
-  // Serve login page GET
-  if (pathname === "/login.html") {
     try {
-      const file = await Deno.readFile(`.${pathname}`);
+      const file = await Deno.readFile(`.${path}`);
       return new Response(file, {
-        status: 200,
         headers: { "content-type": "text/html" },
       });
     } catch {
-      return new Response("Login page not found", { status: 404 });
+      return new Response("Game not found", { status: 404 });
     }
   }
 
-  // Protect game folders
-  if (pathname.startsWith("/games/")) {
-    if (cookies.game_session !== "valid") {
-      return Response.redirect(new URL("/login.html", req.url));
-    }
+  // Serve normal files
+  try {
+    const file = await Deno.readFile(`.${path === "/" ? "/login.html" : path}`);
+    const contentType =
+      path.endsWith(".css") ? "text/css" :
+      path.endsWith(".js")  ? "application/javascript" :
+      "text/html";
 
-    try {
-      const file = await Deno.readFile(`.${pathname}`);
-      let contentType = "text/html";
-      if (pathname.endsWith(".js")) contentType = "application/javascript";
-      if (pathname.endsWith(".css")) contentType = "text/css";
-      if (pathname.endsWith(".png")) contentType = "image/png";
-      if (pathname.endsWith(".jpg") || pathname.endsWith(".jpeg")) contentType = "image/jpeg";
-
-      return new Response(file, { status: 200, headers: { "content-type": contentType } });
-    } catch {
-      return Response.redirect(new URL("/login.html", req.url));
-    }
+    return new Response(file, {
+      headers: { "content-type": contentType },
+    });
+  } catch {
+    return Response.redirect("/login.html", 302);
   }
-
-  // Redirect everything else
-  return Response.redirect(new URL("/login.html", req.url));
 });
