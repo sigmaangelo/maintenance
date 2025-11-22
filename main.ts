@@ -1,41 +1,28 @@
 import { serve } from "https://deno.land/std/http/server.ts";
+import { serveFile } from "https://deno.land/std/http/file_server.ts";
 
-serve(async (req) => {
+serve((req) => {
   const url = new URL(req.url);
-  const path = url.pathname;
-  const ua = req.headers.get("user-agent") || "";
 
-  // Block folder access
-  if (!path.includes(".")) {
-    return new Response("404 Not Found", { status: 404 });
+  // ROOT -> login.html
+  if (url.pathname === "/") {
+    return serveFile(req, "./login.html");
   }
 
-  // If accessing games directly in browser tab — block it
-  if (path.startsWith("/games")) {
-    const inIframe = req.headers.get("sec-fetch-dest") === "iframe";
-
-    // If NOT inside iframe = lock out
-    if (!inIframe) {
-      return Response.redirect(`${url.origin}/menu.html`, 302);
-    }
+  // login
+  if (url.pathname === "/login.html") {
+    return serveFile(req, "./login.html");
   }
 
-  try {
-    const file = await Deno.readFile(`.${path}`);
-
-    const type =
-      path.endsWith(".html") ? "text/html" :
-      path.endsWith(".js")   ? "application/javascript" :
-      path.endsWith(".css")  ? "text/css" :
-      path.endsWith(".png")  ? "image/png" :
-      path.endsWith(".jpg")  ? "image/jpeg" :
-      "application/octet-stream";
-
-    return new Response(file, {
-      headers: { "content-type": type },
-    });
-
-  } catch {
-    return new Response("404 Not Found", { status: 404 });
+  // menu
+  if (url.pathname === "/menu.html") {
+    return serveFile(req, "./menu.html");
   }
+
+  // serve any game files
+  if (url.pathname.startsWith("/games/")) {
+    return serveFile(req, `.${url.pathname}`);
+  }
+
+  return new Response("404 - Not Found", { status: 404 });
 });
