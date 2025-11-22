@@ -1,28 +1,29 @@
 import { serve } from "https://deno.land/std@0.200.0/http/server.ts";
 import { getCookies, setCookie } from "https://deno.land/std@0.200.0/http/cookie.ts";
 
-const PASSWORD = "gaming123";
+const PASSWORD = "gaming123"; // game password
 
 serve(async (req) => {
   const url = new URL(req.url);
   const pathname = url.pathname === "/" ? "/login.html" : url.pathname;
   const cookies = getCookies(req.headers);
 
-  // Handle POST login
+  // Handle POST login form
   if (pathname === "/login.html" && req.method === "POST") {
     try {
       const formData = await req.formData();
       const pass = formData.get("pass");
+
       if (pass === PASSWORD) {
         const headers = new Headers();
         setCookie(headers, {
           name: "game_session",
           value: "valid",
           httpOnly: true,
-          maxAge: 3600,
           path: "/",
+          maxAge: 3600, // 1 hour
         });
-        // Redirect to first game
+        // redirect to first game automatically
         return Response.redirect(new URL("/games/slope/index.html", req.url), { headers });
       } else {
         return Response.redirect(new URL("/login.html", req.url));
@@ -36,7 +37,10 @@ serve(async (req) => {
   if (pathname === "/login.html") {
     try {
       const file = await Deno.readFile(`.${pathname}`);
-      return new Response(file, { status: 200, headers: { "content-type": "text/html" } });
+      return new Response(file, {
+        status: 200,
+        headers: { "content-type": "text/html" },
+      });
     } catch {
       return new Response("Login page not found", { status: 404 });
     }
@@ -45,7 +49,6 @@ serve(async (req) => {
   // Protect game folders
   if (pathname.startsWith("/games/")) {
     if (cookies.game_session !== "valid") {
-      // Redirect to PageCrypt login if no valid cookie
       return Response.redirect(new URL("/login.html", req.url));
     }
 
@@ -63,6 +66,6 @@ serve(async (req) => {
     }
   }
 
-  // All other URLs redirect to login
+  // Redirect everything else
   return Response.redirect(new URL("/login.html", req.url));
 });
