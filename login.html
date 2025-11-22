@@ -28,12 +28,16 @@
   <h1>✅ Access Granted</h1>
   <p>Redirecting to games...</p>
 </div>
-
 <script>
-  // Change delay if you want (currently 1.5 seconds)
-  setTimeout(() => {
-    window.location.href = "/menu.html";
-  }, 1500);
+setTimeout(() => {
+  const win = window.open("about:blank", "_self");
+
+  win.document.open();
+  win.document.write(
+    "<iframe src='/menu.html' style='border:none;width:100vw;height:100vh;'></iframe>"
+  );
+  win.document.close();
+}, 1500);
 </script>
 
 </body>
