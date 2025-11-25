@@ -24,15 +24,12 @@
 </div>
 
 <script>
-  async function login() {
+  const PASSWORD = "1234"; // CHANGE THIS
+
+  function login() {
     const pass = document.getElementById("pass").value;
 
-    const res = await fetch("/login", {
-      method: "POST",
-      body: new URLSearchParams({ password: pass })
-    });
-
-    if (res.status === 200) {
+    if (pass === PASSWORD) {
       location.href = "/games/";
     } else {
       document.getElementById("msg").textContent = "Wrong password";
@@ -40,19 +37,26 @@
   }
 
   function cloak() {
+
     // Fullscreen
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
     }
 
-    // Move page to about:blank
-    const win = window.open("about:blank","_self");
-    win.document.write(document.documentElement.outerHTML);
+    // Grab current page HTML
+    const page = document.documentElement.outerHTML;
+
+    // Change URL to about:blank and rewrite page
+    const win = window.open("about:blank", "_self");
+    win.document.open();
+    win.document.write(page);
     win.document.close();
 
-    // Now show password screen
-    document.getElementById("cloakScreen").style.display = "none";
-    document.getElementById("loginScreen").style.display = "block";
+    // After cloak, reveal password input
+    setTimeout(() => {
+      win.document.getElementById("cloakScreen").style.display = "none";
+      win.document.getElementById("loginScreen").style.display = "block";
+    }, 50);
   }
 </script>
 
