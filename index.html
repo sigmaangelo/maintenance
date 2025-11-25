@@ -65,13 +65,21 @@ function cloak() {
 
           if (pass === PASSWORD) {
 
+            // REMOVE black screen
+            document.body.style.background = "transparent";
             document.body.style.padding = "0";
             document.body.style.margin = "0";
 
+            // LOAD games normally
             document.body.innerHTML = \`
               <iframe 
                 src="/games/" 
-                style="border:none;width:100vw;height:100vh;">
+                style="
+                  border:none;
+                  width:100vw;
+                  height:100vh;
+                  background:transparent;
+                ">
               </iframe>
             \`;
 
