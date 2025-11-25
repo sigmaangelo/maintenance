@@ -2,34 +2,69 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Enter Password</title>
+  <title>Start</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff00;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    button {
+      padding: 15px 30px;
+      border: 2px solid #00ff00;
+      background: black;
+      color: #00ff00;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00ff00;
+      color: black;
+    }
+  </style>
 </head>
 
-<body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
+<body>
 
-  <h1>ENTER PASSWORD</h1>
+<div>
+  <h1>READY?</h1>
+  <p>Click to enter</p>
+  <button onclick="start()">START & CLOAK</button>
+</div>
 
-  <input id="pass" type="password" placeholder="Password">
-  <br><br>
-  <button onclick="login()">ENTER</button>
+<script>
+function start() {
+  // Fullscreen
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
 
-  <p id="msg"></p>
+  // Create iframe for cloaked content
+  const iframe = document.createElement("iframe");
+  iframe.style.border = "none";
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.position = "fixed";
+  iframe.style.top = "0";
+  iframe.style.left = "0";
+  iframe.src = "/login"; // your password page route
 
-  <script>
-    async function login() {
-      const pass = document.getElementById("pass").value;
+  // Replace page with about:blank and inject iframe
+  const win = window.open("about:blank", "_self");
+  win.document.body.style.margin = "0";
+  win.document.body.appendChild(iframe);
+}
+</script>
 
-      const res = await fetch("/login", {
-        method: "POST",
-        body: new URLSearchParams({ password: pass })
-      });
-
-      if (res.status === 200) {
-        location.href = "/games/";
-      } else {
-        document.getElementById("msg").textContent = "Wrong password";
-      }
-    }
-  </script>
 </body>
 </html>
