@@ -7,43 +7,54 @@
 
 <body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
 
+<div id="cloakScreen">
+  <h1>PRESS TO CLOAK</h1>
+  <br>
+  <button onclick="cloak()">CLOAK</button>
+</div>
+
+<div id="loginScreen" style="display:none;">
   <h1>ENTER PASSWORD</h1>
 
   <input id="pass" type="password" placeholder="Password">
   <br><br>
   <button onclick="login()">ENTER</button>
-  <br><br>
-  <button onclick="cloak()">CLOAK</button>
 
   <p id="msg"></p>
+</div>
 
-  <script>
-    async function login() {
-      const pass = document.getElementById("pass").value;
+<script>
+  async function login() {
+    const pass = document.getElementById("pass").value;
 
-      const res = await fetch("/login", {
-        method: "POST",
-        body: new URLSearchParams({ password: pass })
-      });
+    const res = await fetch("/login", {
+      method: "POST",
+      body: new URLSearchParams({ password: pass })
+    });
 
-      if (res.status === 200) {
-        location.href = "/games/";
-      } else {
-        document.getElementById("msg").textContent = "Wrong password";
-      }
+    if (res.status === 200) {
+      location.href = "/games/";
+    } else {
+      document.getElementById("msg").textContent = "Wrong password";
+    }
+  }
+
+  function cloak() {
+    // Fullscreen
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
     }
 
-    function cloak() {
-      // Fullscreen
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      }
+    // Move page to about:blank
+    const win = window.open("about:blank","_self");
+    win.document.write(document.documentElement.outerHTML);
+    win.document.close();
 
-      // Cloak to about:blank
-      const win = window.open("about:blank","_self");
-      win.document.write(document.documentElement.outerHTML);
-      win.document.close();
-    }
-  </script>
+    // Now show password screen
+    document.getElementById("cloakScreen").style.display = "none";
+    document.getElementById("loginScreen").style.display = "block";
+  }
+</script>
+
 </body>
 </html>
