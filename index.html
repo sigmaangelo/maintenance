@@ -2,68 +2,65 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Start</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    body {
-      margin: 0;
-      background: black;
-      color: #00ff00;
-      font-family: monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
-
-    button {
-      padding: 15px 30px;
-      border: 2px solid #00ff00;
-      background: black;
-      color: #00ff00;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #00ff00;
-      color: black;
-    }
-  </style>
+  <title>System Access</title>
 </head>
 
-<body>
+<body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
 
-<div>
-  <h1>READY?</h1>
-  <p>Click to enter</p>
-  <button onclick="start()">START & CLOAK</button>
+<!-- ========== CLOAK SCREEN ========== -->
+<div id="cloakScreen">
+  <h1>SYSTEM LOADED</h1>
+  <p>Press the button below to cloak this page.</p>
+  <br>
+  <button onclick="cloak()">CLOAK</button>
+</div>
+
+<!-- ========== LOGIN SCREEN ========== -->
+<div id="loginScreen" style="display:none;">
+  <h1>ENTER PASSWORD</h1>
+
+  <input id="pass" type="password" placeholder="Password">
+  <br><br>
+  <button onclick="login()">ENTER</button>
+
+  <p id="msg"></p>
 </div>
 
 <script>
-function start() {
-  // Fullscreen
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen();
+  const CORRECT_PASSWORD = "1234"; // <-- change password here
+
+  // CLOAK + FULLSCREEN
+  function cloak() {
+
+    // fullscreen (only works after button click)
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+
+    // open about:blank and clone this page into it
+    const win = window.open("about:blank", "_self");
+    win.document.write(document.documentElement.outerHTML);
+    win.document.close();
   }
 
-  // Create iframe for cloaked content
-  const iframe = document.createElement("iframe");
-  iframe.style.border = "none";
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
-  iframe.style.position = "fixed";
-  iframe.style.top = "0";
-  iframe.style.left = "0";
-  iframe.src = "/login"; // your password page route
+  // LOGIN CHECK
+  function login() {
+    const pass = document.getElementById("pass").value;
 
-  // Replace page with about:blank and inject iframe
-  const win = window.open("about:blank", "_self");
-  win.document.body.style.margin = "0";
-  win.document.body.appendChild(iframe);
-}
+    if (pass === CORRECT_PASSWORD) {
+      window.location.href = "https://example.com"; 
+      // 👆 change this to your real page later
+    } else {
+      document.getElementById("msg").textContent = "Wrong password";
+    }
+  }
+
+  // Once page is cloaked, show password screen
+  if (location.href === "about:blank") {
+    document.getElementById("cloakScreen").style.display = "none";
+    document.getElementById("loginScreen").style.display = "block";
+  }
+
 </script>
 
 </body>
