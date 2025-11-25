@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Enter Password</title>
+<meta charset="UTF-8">
+<title>Enter Password</title>
 </head>
 
 <body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
@@ -33,6 +33,7 @@ function cloak() {
           font-family:monospace;
           text-align:center;
           padding-top:100px;
+          margin:0;
         }
 
         input, button {
@@ -47,6 +48,7 @@ function cloak() {
     </head>
 
     <body>
+
       <h1>ENTER PASSWORD</h1>
 
       <input id="pass" type="password" placeholder="Password">
@@ -62,13 +64,22 @@ function cloak() {
           const pass = document.getElementById("pass").value;
 
           if (pass === PASSWORD) {
-            location.href = "/games/";
+
+            document.body.style.padding = "0";
+            document.body.style.margin = "0";
+
+            document.body.innerHTML = \`
+              <iframe 
+                src="/games/" 
+                style="border:none;width:100vw;height:100vh;">
+              </iframe>
+            \`;
+
           } else {
             document.getElementById("msg").textContent = "Wrong password";
           }
         }
 
-        // allow enter key
         document.getElementById("pass").addEventListener("keydown", e => {
           if (e.key === "Enter") login();
         });
