@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Enter Password</title>
+</head>
+
+<body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
+
+  <h1>ENTER PASSWORD</h1>
+
+  <input id="pass" type="password" placeholder="Password">
+  <br><br>
+  <button onclick="login()">ENTER</button>
+
+  <p id="msg"></p>
+
+  <script>
+    async function login() {
+      const pass = document.getElementById("pass").value;
+
+      const res = await fetch("/login", {
+        method: "POST",
+        body: new URLSearchParams({ password: pass })
+      });
+
+      if (res.status === 200) {
+        location.href = "/games/";
+      } else {
+        document.getElementById("msg").textContent = "Wrong password";
+      }
+    }
+  </script>
+</body>
+</html>
