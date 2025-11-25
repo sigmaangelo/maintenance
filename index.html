@@ -2,66 +2,48 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>System Access</title>
+  <title>Enter Password</title>
 </head>
 
 <body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
 
-<!-- ========== CLOAK SCREEN ========== -->
-<div id="cloakScreen">
-  <h1>SYSTEM LOADED</h1>
-  <p>Press the button below to cloak this page.</p>
-  <br>
-  <button onclick="cloak()">CLOAK</button>
-</div>
-
-<!-- ========== LOGIN SCREEN ========== -->
-<div id="loginScreen" style="display:none;">
   <h1>ENTER PASSWORD</h1>
 
   <input id="pass" type="password" placeholder="Password">
   <br><br>
   <button onclick="login()">ENTER</button>
+  <br><br>
+  <button onclick="cloak()">CLOAK</button>
 
   <p id="msg"></p>
-</div>
 
-<script>
-  const CORRECT_PASSWORD = "1234"; // <-- change password here
+  <script>
+    async function login() {
+      const pass = document.getElementById("pass").value;
 
-  // CLOAK + FULLSCREEN
-  function cloak() {
+      const res = await fetch("/login", {
+        method: "POST",
+        body: new URLSearchParams({ password: pass })
+      });
 
-    // fullscreen (only works after button click)
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
+      if (res.status === 200) {
+        location.href = "/games/";
+      } else {
+        document.getElementById("msg").textContent = "Wrong password";
+      }
     }
 
-    // open about:blank and clone this page into it
-    const win = window.open("about:blank", "_self");
-    win.document.write(document.documentElement.outerHTML);
-    win.document.close();
-  }
+    function cloak() {
+      // Fullscreen
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
 
-  // LOGIN CHECK
-  function login() {
-    const pass = document.getElementById("pass").value;
-
-    if (pass === CORRECT_PASSWORD) {
-      window.location.href = "https://example.com"; 
-      // 👆 change this to your real page later
-    } else {
-      document.getElementById("msg").textContent = "Wrong password";
+      // Cloak to about:blank
+      const win = window.open("about:blank","_self");
+      win.document.write(document.documentElement.outerHTML);
+      win.document.close();
     }
-  }
-
-  // Once page is cloaked, show password screen
-  if (location.href === "about:blank") {
-    document.getElementById("cloakScreen").style.display = "none";
-    document.getElementById("loginScreen").style.display = "block";
-  }
-
-</script>
-
+  </script>
 </body>
 </html>
