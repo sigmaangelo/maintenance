@@ -13,51 +13,73 @@
   <button onclick="cloak()">CLOAK</button>
 </div>
 
-<div id="loginScreen" style="display:none;">
-  <h1>ENTER PASSWORD</h1>
-
-  <input id="pass" type="password" placeholder="Password">
-  <br><br>
-  <button onclick="login()">ENTER</button>
-
-  <p id="msg"></p>
-</div>
-
 <script>
-  const PASSWORD = "1234"; // CHANGE THIS
+const PASSWORD = "1234"; // CHANGE THIS
 
-  function login() {
-    const pass = document.getElementById("pass").value;
+function cloak() {
+  const win = window.open("about:blank", "_blank");
 
-    if (pass === PASSWORD) {
-      location.href = "/games/";
-    } else {
-      document.getElementById("msg").textContent = "Wrong password";
-    }
-  }
+  win.document.open();
+  win.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Secure</title>
+      <style>
+        body {
+          background:black;
+          color:#0f0;
+          font-family:monospace;
+          text-align:center;
+          padding-top:100px;
+        }
 
-  function cloak() {
+        input, button {
+          background:black;
+          border:1px solid #0f0;
+          color:#0f0;
+          padding:10px;
+          margin-top:10px;
+          font-family:monospace;
+        }
+      </style>
+    </head>
 
-    // Fullscreen
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    }
+    <body>
+      <h1>ENTER PASSWORD</h1>
 
-    // Grab current page HTML
-    const page = document.documentElement.outerHTML;
+      <input id="pass" type="password" placeholder="Password">
+      <br><br>
+      <button onclick="login()">ENTER</button>
 
-    // Change URL to about:blank and rewrite page
-    const win = window.open("about:blank", "_self");
-    win.document.open();
-    win.document.write(page);
-    win.document.close();
+      <p id="msg"></p>
 
-    // After cloak, reveal password input
-    setTimeout(() => {
-      win.document.getElementById("cloakScreen").style.display = "none";
-      win.document.getElementById("loginScreen").style.display = "block";
-    }, 50);
-  }
+      <script>
+        const PASSWORD = "${PASSWORD}";
+
+        function login() {
+          const pass = document.getElementById("pass").value;
+
+          if (pass === PASSWORD) {
+            location.href = "/games/";
+          } else {
+            document.getElementById("msg").textContent = "Wrong password";
+          }
+        }
+
+        // allow enter key
+        document.getElementById("pass").addEventListener("keydown", e => {
+          if (e.key === "Enter") login();
+        });
+      <\/script>
+
+    </body>
+    </html>
+  `);
+
+  win.document.close();
+}
 </script>
 
 </body>
