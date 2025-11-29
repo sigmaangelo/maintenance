@@ -1,49 +1,46 @@
-import { serve } from "https://deno.land/std/http/server.ts";
+import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
 
 const PASSWORD = "1234";
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   const url = new URL(req.url);
-  const path = url.pathname;
 
-  const cookies = req.headers.get("cookie") || "";
-  const authenticated = cookies.includes("auth=1");
-
-  console.log("Request:", path);
-
-  // Protect games
-  if (path.startsWith("/games") && !authenticated) {
-    return new Response("403 Forbidden", { status: 403 });
-  }
-
-  // Login (POST)
-  if (path === "/login" && req.method === "POST") {
+  // ----------------------
+  // LOGIN ENDPOINT
+  // ----------------------
+  if (url.pathname === "/login" && req.method === "POST") {
     const form = await req.formData();
-    const pwd = form.get("password");
-    if (pwd === PASSWORD) {
-      return new Response("OK", {
-        headers: {
-          "Set-Cookie": "auth=1; HttpOnly; Path=/"
-        }
-      });
+    const pass = form.get("password");
+
+    if (pass !== PASSWORD) {
+      return new Response("Bad password", { status: 403 });
     }
-    return new Response("WRONG", { status: 401 });
+
+    // VALID LOGIN — set cookie
+    return new Response("OK", {
+      status: 200,
+      headers: {
+        "Set-Cookie":
+          "auth=1; Path=/; Max-Age=86400; HttpOnly; SameSite=Strict;",
+      },
+    });
   }
 
-  // Serve files
-  const filePath = path.endsWith("/") ? `.${path}index.html` : `.${path}`;
-  try {
-    const data = await Deno.readFile(filePath);
-    const type = getType(filePath);
-    return new Response(data, { headers: { "content-type": type } });
-  } catch {
-    return new Response("404 Not Found", { status: 404 });
+  // ----------------------
+  // PROTECT /games/*
+  // ----------------------
+  if (url.pathname.startsWith("/games")) {
+    const cookies = req.headers.get("cookie") || "";
+    const cookieAllowed = cookies.includes("auth=1");
+
+    if (!cookieAllowed) {
+      return new Response("Forbidden", { status: 403 });
+    }
   }
+
+  // serve files (including index.html)
+  return serveDir(req, {
+    fsRoot: ".",
+    urlRoot: "",
+  });
 });
-
-function getType(path) {
-  if (path.endsWith(".html")) return "text/html";
-  if (path.endsWith(".css")) return "text/css";
-  if (path.endsWith(".js")) return "application/javascript";
-  return "text/plain";
-}
