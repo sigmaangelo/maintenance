@@ -1,14 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Start</title>
-  <style>
-    body { background: white; font-family: Arial; text-align: center; padding-top: 80px; }
-    button { padding: 20px 40px; font-size: 24px; cursor: pointer; }
-  </style>
+<meta charset="UTF-8" />
+<title>Enter Password</title>
+
+<style>
+  body {
+    background: white;
+    color: black;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 100px;
+  }
+
+  button, input {
+    padding: 10px 15px;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+</style>
 </head>
+
 <body>
-  <button onclick="location.href='cloak.html'">Cloak</button>
+
+<h1>CLOAKED MODE</h1>
+<button onclick="startCloak()">ENTER CLOAK</button>
+
+<script>
+const PASSWORD = "1234"; // change this
+
+function startCloak() {
+  // Open the secure blank tab
+  const win = window.open("about:blank", "_blank");
+
+  if (!win) {
+    alert("Your browser blocked the cloaked window. Allow pop-ups.");
+    return;
+  }
+
+  // Replace the blank page with protected UI
+  win.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8" />
+      <title>Cloaked</title>
+      <style>
+        body {
+          background: white;
+          color: black;
+          font-family: Arial, sans-serif;
+          text-align: center;
+          padding-top: 100px;
+        }
+        input, button {
+          padding: 10px 15px;
+          font-size: 16px;
+          margin-top: 10px;
+        }
+      </style>
+    </head>
+    <body>
+
+      <h1>ENTER PASSWORD</h1>
+      <input id="pass" type="password" placeholder="Password" />
+      <br />
+      <button onclick="login()">ENTER</button>
+      <p id="msg"></p>
+
+      <script>
+        function login() {
+          const entered = document.getElementById("pass").value;
+
+          if (entered !== "${PASSWORD}") {
+            document.getElementById("msg").textContent = "Wrong password";
+            return;
+          }
+
+          // SUCCESS → load the cloaked homepage
+          document.body.innerHTML = \`
+            <h1>HOME</h1>
+            <button onclick="goGames()">Go to Games</button>
+          \`;
+        }
+
+        function goGames() {
+          // Navigate the cloaked window to a *real* file
+          window.location.href = "/games.html";
+        }
+
+        document.addEventListener("keydown", e => {
+          if (e.key === "Enter") login();
+        });
+      <\/script>
+    </body>
+    </html>
+  `);
+
+  win.document.close();
+}
+</script>
+
 </body>
 </html>
