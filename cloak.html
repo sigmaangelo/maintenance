@@ -1,64 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Secure</title>
-<style>
-  body {
-    background:black;
-    color:#0f0;
-    font-family:monospace;
-    text-align:center;
-    padding-top:100px;
-    margin:0;
-  }
-  input, button {
-    background:black;
-    border:1px solid #0f0;
-    color:#0f0;
-    padding:10px;
-    margin-top:10px;
-    font-family:monospace;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Password</title>
+  <style>
+    body { background: white; font-family: Arial; text-align: center; padding-top: 80px; }
+    input { font-size: 22px; padding: 10px; }
+    button { padding: 10px 20px; font-size: 22px; cursor: pointer; }
+  </style>
 </head>
-
 <body>
 
-<h1>ENTER PASSWORD</h1>
+  <h2>Enter Passcode</h2>
 
-<input id="pass" type="password" placeholder="Password">
-<br><br>
-<button onclick="login()">ENTER</button>
+  <input type="password" id="pass">
+  <button onclick="checkPass()">Submit</button>
 
-<p id="msg"></p>
-
-<script>
-async function login() {
-  const pass = document.getElementById("pass").value;
-
-  const form = new FormData();
-  form.append("password", pass);
-
-  const res = await fetch("/login", {
-    method: "POST",
-    body: form,
-    credentials: "include"
-  });
-
-  if (!res.ok) {
-    document.getElementById("msg").textContent = "Wrong password";
-    return;
-  }
-
-  // Real navigation inside this same cloaked tab
-  window.location.href = "/games/";
-}
-
-document.getElementById("pass").addEventListener("keydown", e => {
-  if (e.key === "Enter") login();
-});
-</script>
+  <script>
+    function checkPass() {
+      if (document.getElementById("pass").value === "1234") {
+        window.location.href = "home.html";
+      } else {
+        alert("Incorrect Password");
+      }
+    }
+  </script>
 
 </body>
 </html>
