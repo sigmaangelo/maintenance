@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Secure</title>
+<style>
+  body {
+    background:black;
+    color:#0f0;
+    font-family:monospace;
+    text-align:center;
+    padding-top:100px;
+    margin:0;
+  }
+  input, button {
+    background:black;
+    border:1px solid #0f0;
+    color:#0f0;
+    padding:10px;
+    margin-top:10px;
+    font-family:monospace;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>ENTER PASSWORD</h1>
+
+<input id="pass" type="password" placeholder="Password">
+<br><br>
+<button onclick="login()">ENTER</button>
+
+<p id="msg"></p>
+
+<script>
+async function login() {
+  const pass = document.getElementById("pass").value;
+
+  const form = new FormData();
+  form.append("password", pass);
+
+  const res = await fetch("/login", {
+    method: "POST",
+    body: form,
+    credentials: "include"
+  });
+
+  if (!res.ok) {
+    document.getElementById("msg").textContent = "Wrong password";
+    return;
+  }
+
+  // Real navigation inside this same cloaked tab
+  window.location.href = "/games/";
+}
+
+document.getElementById("pass").addEventListener("keydown", e => {
+  if (e.key === "Enter") login();
+});
+</script>
+
+</body>
+</html>
