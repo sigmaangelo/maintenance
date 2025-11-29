@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Enter Password </title>
+<title>Enter Password</title>
 </head>
 
 <body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
@@ -17,6 +17,7 @@
 const PASSWORD = "1234"; // CHANGE THIS
 
 function cloak() {
+  // Open cloaked window
   const win = window.open("about:blank", "_blank");
 
   win.document.open();
@@ -60,32 +61,42 @@ function cloak() {
       <script>
         const PASSWORD = "${PASSWORD}";
 
-        function login() {
+        async function login() {
           const pass = document.getElementById("pass").value;
 
-          if (pass === PASSWORD) {
-
-            // REMOVE black screen
-            document.body.style.background = "transparent";
-            document.body.style.padding = "0";
-            document.body.style.margin = "0";
-
-            // LOAD games normally
-            document.body.innerHTML = \`
-              <iframe 
-                src="/games/" 
-                style="
-                  border:none;
-                  width:100vw;
-                  height:100vh;
-                  background:transparent;
-                ">
-              </iframe>
-            \`;
-
-          } else {
+          if (pass !== PASSWORD) {
             document.getElementById("msg").textContent = "Wrong password";
+            return;
           }
+
+          // ------------------------------
+          // 🔥 SEND LOGIN REQUEST TO DENO
+          // ------------------------------
+          const form = new FormData();
+          form.append("password", PASSWORD);
+
+          const res = await fetch("/login", {
+            method: "POST",
+            body: form
+          });
+
+          if (!res.ok) {
+            document.getElementById("msg").textContent = "Server rejected password";
+            return;
+          }
+
+          // ------------------------------
+          // 🔥 COOKIE STORED — NOW LOAD GAMES
+          // ------------------------------
+          document.body.style.margin = "0";
+          document.body.style.padding = "0";
+
+          document.body.innerHTML = \`
+            <iframe 
+              src="/games/" 
+              style="border:none;width:100vw;height:100vh;background:black;">
+            </iframe>
+          \`;
         }
 
         document.getElementById("pass").addEventListener("keydown", e => {
