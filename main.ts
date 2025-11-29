@@ -1,46 +1,66 @@
-import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
-const PASSWORD = "1234";
+const PASSWORD = "1234"; // CHANGE THIS
 
-Deno.serve(async (req) => {
+serve(async (req) => {
   const url = new URL(req.url);
+  const path = url.pathname;
 
-  // ----------------------
-  // LOGIN ENDPOINT
-  // ----------------------
-  if (url.pathname === "/login" && req.method === "POST") {
+  const cookies = req.headers.get("cookie") || "";
+  const authenticated = cookies.includes("auth=1");
+
+  console.log("Request:", path);
+
+  // ---------------------------
+  // 1️⃣ PROTECT ALL /games PATHS INCLUDING /games/ ITSELF
+  // ---------------------------
+  if ((path === "/games" || path.startsWith("/games/")) && !authenticated) {
+    return new Response("403 - Forbidden", { status: 403 });
+  }
+
+  // ---------------------------
+  // 2️⃣ HANDLE PASSWORD LOGIN
+  // ---------------------------
+  if (path === "/login" && req.method === "POST") {
     const form = await req.formData();
-    const pass = form.get("password");
+    const password = form.get("password");
 
-    if (pass !== PASSWORD) {
-      return new Response("Bad password", { status: 403 });
+    if (password === PASSWORD) {
+      return new Response("OK", {
+        headers: {
+          "Set-Cookie": "auth=1; HttpOnly; Path=/",
+        },
+      });
     }
 
-    // VALID LOGIN — set cookie
-    return new Response("OK", {
-      status: 200,
-      headers: {
-        "Set-Cookie":
-          "auth=1; Path=/; Max-Age=86400; HttpOnly; SameSite=Strict;",
-      },
+    return new Response("WRONG", { status: 401 });
+  }
+
+  // ---------------------------
+  // 3️⃣ SERVE FILES
+  // ---------------------------
+  const filePath = path.endsWith("/") ? `.${path}index.html` : `.${path}`;
+
+  try {
+    const file = await Deno.readFile(filePath);
+    const contentType = getType(filePath);
+
+    return new Response(file, {
+      headers: { "content-type": contentType },
     });
+  } catch {
+    return new Response("404 not found", { status: 404 });
   }
-
-  // ----------------------
-  // PROTECT /games/*
-  // ----------------------
-  if (url.pathname.startsWith("/games")) {
-    const cookies = req.headers.get("cookie") || "";
-    const cookieAllowed = cookies.includes("auth=1");
-
-    if (!cookieAllowed) {
-      return new Response("Forbidden", { status: 403 });
-    }
-  }
-
-  // serve files (including index.html)
-  return serveDir(req, {
-    fsRoot: ".",
-    urlRoot: "",
-  });
 });
+
+// ---------------------------
+// 4️⃣ HELPER: content-type
+// ---------------------------
+function getType(path: string) {
+  if (path.endsWith(".html")) return "text/html";
+  if (path.endsWith(".js")) return "application/javascript";
+  if (path.endsWith(".css")) return "text/css";
+  if (path.endsWith(".png")) return "image/png";
+  if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
+  return "text/plain";
+}

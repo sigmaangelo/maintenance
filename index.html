@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Enter Password</ title>
+<title>Enter Password</title>
 </head>
 
 <body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
@@ -24,7 +24,7 @@ function cloak() {
     <!DOCTYPE html>
     <html>
     <head>
-      <meta charset='UTF-8'>
+      <meta charset="UTF-8">
       <title>Secure</title>
       <style>
         body {
@@ -67,12 +67,14 @@ function cloak() {
             return;
           }
 
+          // send password to server
           const form = new FormData();
           form.append("password", PASSWORD);
 
           const res = await fetch("/login", {
             method: "POST",
-            body: form
+            body: form,
+            credentials: "include"
           });
 
           if (!res.ok) {
@@ -80,7 +82,7 @@ function cloak() {
             return;
           }
 
-          // 🔥 Cookie was set — now navigate directly
+          // SUCCESS → Navigate to /games/
           window.location.href = "/games/";
         }
 
