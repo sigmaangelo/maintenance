@@ -1,116 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<title>Enter Password</title>
-
+<meta charset="utf-8" />
+<title>Start - Cloak</title>
 <style>
-  body {
-    background: white;
-    color: black;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 100px;
-  }
-
-  button, input {
-    padding: 10px 15px;
-    margin-top: 10px;
-    font-size: 16px;
-  }
+  body { background: white; color: black; font-family: Arial, sans-serif; text-align:center; padding-top:100px; }
+  button, input { padding:10px 14px; font-size:16px; margin-top:10px; }
 </style>
 </head>
- <script>
- 
-
-    function cloak(url) {
-        let win = window.open("about:blank", "_blank");
-        let iframe = win.document.createElement("iframe");
-        iframe.src = url;
-        iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
-        win.document.body.style.margin = "0";
-        win.document.body.appendChild(iframe);
-    }
-</script>
 <body>
-
-<h1>CLOAKED MODE</h1>
-<button onclick="startCloak()">ENTER CLOAK</button>
+  <h1>CLOAK MODE</h1>
+  <button id="cloakBtn">CLOAK</button>
 
 <script>
-const PASSWORD = "1234"; // change this
+const PASSWORD = "1234"; // change to match main.ts
 
-function startCloak() {
-  // Open the secure blank tab
+document.getElementById("cloakBtn").addEventListener("click", () => {
+  // open a new about:blank tab and write the cloaked UI into it
   const win = window.open("about:blank", "_blank");
-
   if (!win) {
-    alert("Your browser blocked the cloaked window. Allow pop-ups.");
+    alert("Popup blocked — allow popups for this site");
     return;
   }
 
-  // Replace the blank page with protected UI
+  // Write the cloaked UI. Important: writing into about:blank this way gives the new document the same origin
+  // as the opener so fetch() and cookies work.
+  win.document.open();
   win.document.write(`
-    <!DOCTYPE html>
+    <!doctype html>
     <html>
     <head>
-      <meta charset="UTF-8" />
+      <meta charset="utf-8" />
       <title>Cloaked</title>
       <style>
-        body {
-          background: white;
-          color: black;
-          font-family: Arial, sans-serif;
-          text-align: center;
-          padding-top: 100px;
-        }
-        input, button {
-          padding: 10px 15px;
-          font-size: 16px;
-          margin-top: 10px;
-        }
+        body { background:white; color:black; font-family: Arial, sans-serif; text-align:center; padding-top:80px; }
+        input, button { padding:10px 14px; font-size:16px; margin-top:10px; }
       </style>
     </head>
     <body>
-
-      <h1>ENTER PASSWORD</h1>
-      <input id="pass" type="password" placeholder="Password" />
-      <br />
-      <button onclick="login()">ENTER</button>
-      <p id="msg"></p>
+      <h2>Enter Passcode</h2>
+      <input id="pass" type="password" placeholder="pass" />
+      <br/>
+      <button id="enterBtn">ENTER</button>
+      <p id="msg" style="color:red"></p>
 
       <script>
-        function login() {
-          const entered = document.getElementById("pass").value;
+        // login function that POSTs to /login and then navigates this cloaked window to /games.html
+        async function doLogin() {
+          const pass = document.getElementById('pass').value;
 
-          if (entered !== "${PASSWORD}") {
-            document.getElementById("msg").textContent = "Wrong password";
+          // Basic client-side quick-check (optional)
+          if (!pass) {
+            document.getElementById('msg').textContent = 'Enter password';
             return;
           }
 
-          // SUCCESS → load the cloaked homepage
-          document.body.innerHTML = \`
-            <h1>HOME</h1>
-    <a  onclick="cloak('games/')" href="#">candy crush</a>
-          \`;
+          const form = new FormData();
+          form.append('password', pass);
+
+          try {
+            const res = await fetch('/login', { method: 'POST', body: form });
+            if (!res.ok) {
+              document.getElementById('msg').textContent = 'Wrong password';
+              return;
+            }
+
+            // success — cookie set by server in response; now navigate this cloaked tab to protected page
+            // THIS navigation stays in this cloaked tab and will include the cookie
+            window.location.href = '/games.html';
+          } catch (err) {
+            document.getElementById('msg').textContent = 'Network error';
+            console.error(err);
+          }
         }
 
-        function goGames() {
-          // Navigate the cloaked window to a *real* file
-          window.location.href = "/games.html";
-        }
-
-        document.addEventListener("keydown", e => {
-          if (e.key === "Enter") login();
+        document.getElementById('enterBtn').addEventListener('click', doLogin);
+        document.getElementById('pass').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') doLogin();
         });
       <\/script>
     </body>
     </html>
   `);
-
   win.document.close();
-}
+});
 </script>
- 
 </body>
 </html>
