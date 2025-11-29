@@ -1,116 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Enter Password</title>
+  <meta charset="UTF-8">
+  <title>Start</title>
+  <style>
+    body { background: white; font-family: Arial; text-align: center; padding-top: 80px; }
+    button { padding: 20px 40px; font-size: 24px; cursor: pointer; }
+  </style>
 </head>
-
-<body style="background:black;color:#0f0;font-family:monospace;text-align:center;padding-top:100px;">
-
-<div id="cloakScreen">
-  <h1>PRESS TO CLOAK</h1>
-  <br>
-  <button onclick="cloak()">CLOAK</button>
-</div>
-
-<script>
-const PASSWORD = "1234"; // CHANGE THIS
-
-function cloak() {
-  // Open cloaked window
-  const win = window.open("about:blank", "_blank");
-
-  win.document.open();
-  win.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>Secure</title>
-      <style>
-        body {
-          background:black;
-          color:#0f0;
-          font-family:monospace;
-          text-align:center;
-          padding-top:100px;
-          margin:0;
-        }
-
-        input, button {
-          background:black;
-          border:1px solid #0f0;
-          color:#0f0;
-          padding:10px;
-          margin-top:10px;
-          font-family:monospace;
-        }
-      </style>
-    </head>
-
-    <body>
-
-      <h1>ENTER PASSWORD</h1>
-
-      <input id="pass" type="password" placeholder="Password">
-      <br><br>
-      <button onclick="login()">ENTER</button>
-
-      <p id="msg"></p>
-
-      <script>
-        const PASSWORD = "${PASSWORD}";
-
-        async function login() {
-          const pass = document.getElementById("pass").value;
-
-          if (pass !== PASSWORD) {
-            document.getElementById("msg").textContent = "Wrong password";
-            return;
-          }
-
-          // ------------------------------
-          // 🔥 SEND LOGIN REQUEST TO DENO
-          // ------------------------------
-          const form = new FormData();
-          form.append("password", PASSWORD);
-
-          const res = await fetch("/login", {
-            method: "POST",
-            body: form
-          });
-
-          if (!res.ok) {
-            document.getElementById("msg").textContent = "Server rejected password";
-            return;
-          }
-
-          // ------------------------------
-          // 🔥 COOKIE STORED — NOW LOAD GAMES
-          // ------------------------------
-          document.body.style.margin = "0";
-          document.body.style.padding = "0";
-
-          document.body.innerHTML = \`
-            <iframe 
-              src="/games/index.html" 
-              style="border:none;width:1000vw;height:800vh;">
-            </iframe>
-          \`;
-        }
-
-        document.getElementById("pass").addEventListener("keydown", e => {
-          if (e.key === "Enter") login();
-        });
-      <\/script>
-
-    </body>
-    </html>
-  `);
-
-  win.document.close();
-}
-</script>
-
+<body>
+  <button onclick="location.href='cloak.html'">Cloak</button>
 </body>
 </html>
