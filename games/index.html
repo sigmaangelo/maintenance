@@ -1,8 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Games</title>
-  <script>
+<meta charset="UTF-8" />
+<small>
+
+</small>
+<style>
+
+    body {
+        background: orange;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+    }
+    
+    button, a.game-btn {
+        background: lightblue;
+        color: red;
+        border: 2px solid #6aa9ff;
+        padding: 12px 20px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 8px;
+        font-size: 18px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.25s;
+        width: 240px;
+        text-align: center;
+    }
+
+    button:hover, a.game-btn:hover {
+        background: #c98c53;
+        color: black;
+        box-shadow: 0 0 18px #6aa9ff;
+        transform: scale(1.05);
+    }
+
+    button, a.game-btn {
+        background: #1a1f29;
+        color: #dddddd;
+        border: 2px solid #5C4033;
+        padding: 12px 20px;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 8px;
+        font-size: 18px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.25s;
+        width: 240px;
+        text-shadow: 0.5px 0.5px orange;
+        text-align: center;
+    }
+
+    button:hover, a.game-btn:hover {
+        background: #c98c53;
+        color: black;
+        text-shadow: 2px 2px orange;
+        box-shadow: 0 0 28px #FF5C00;
+        border: 2px solid rgba(0,0,0, 0.75);
+        transform: scale(1.05);
+    }
+
+    #anel {
+        display: none;
+        margin-top: 30px;
+    }
+
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 25px;
+        gap: 12px;
+    }
+    my-image{
+        height:105%;
+
+    width:100%;
+    }
+    .colorh1{
+        color:#a84232;
+
+    }
+    .pcolor{
+        color:#a84232;
+        
+    }
+</style>
+
+<script>
  
 
     function cloak(url) {
@@ -14,13 +104,197 @@
         win.document.body.appendChild(iframe);
     }
 </script>
+       
+       <script>
+document.addEventListener("keydown", function(e) {
+  if (e.key.toLowerCase() === "t") {
+    window.location.href = "https://classroom.mcpsmd.org/";
+  }
+});
+</script>
+
 </head>
 
+<body>
 
-<h1>GAME HUB</h1>
 
-<a href="/games/slope/">Play Slope</a>
-<a  onclick="cloak('slope/')" href="#">Papery Planes</a>
+
+
+   <big><h1 class="colorh1">Sigma Games 🎮🗿🧏 </h1></big>
+    <p class="pcolor">THANKSGIVING UPDATE! 2.O</p>
+    <p class="pcolor">Added new games and fixed non working ones</p>
+    <p class="pcolor">BIG THANKS TO INDIAN SCAMMER AND ITALIAN PIZZA MAKER FOR MAKING THE CSS FOR THIS WEBPAGE</p>
+        <p class="pcolor">THANKS - PASTABOY</p>
+    <p class="pcolor">Be patient some games take longer to load</p>
+    <p class="pcolor">PANIC KEY IS T, USE WHEN TEACHER COMING</p>
+    <div class="grid">
+    <div class="grid">
+
+   
+    <a class="game-btn" onclick="cloak('newgames/candycrush/')" href="#">candy crush</a>
+    <a class="game-btn" onclick="cloak('1v1lol/')" href="#">1v1lol</a>
+    <a class="game-btn" onclick="cloak('tap/')" href="#">1v1lol</a>
+    <a class="game-btn" onclick="cloak('newgames/stackCode/')" href="#">stack</a>
+    <a class="game-btn" onclick="cloak('newgames/2048code/')" href="#">2048</a>
+    <a class="game-btn" onclick="cloak('newgames/fluidsim/')" href="#">fluidsim</a>
+    <a class="game-btn" onclick="cloak('https://sigma2.wasmer.app/html/Drive%20Mad%20200%20Levels/')" href="#">drivemad</a>
+    <a class="game-btn" onclick="cloak('newgames/spacebarclicker/')" href="#">spacebarclicker</a>
+    <a class="game-btn" onclick="cloak('HexGL/')" href="#">HexGL</a>
+    <a class="game-btn" onclick="cloak('OfflineParadise/')" href="#">OfflineParadise</a>
+    <a class="game-btn" onclick="cloak('Stickman-Survival/')" href="#">Stickman Survival</a>
+    <a class="game-btn" onclick="cloak('angry-birds/')" href="#">Angry Birds</a>
+    <a class="game-btn" onclick="cloak('backflip-dive-3d/')" href="#">Backflip Dive</a>
+    <a class="game-btn" onclick="cloak('backrooms/')" href="#">Backrooms</a>
+    <a class="game-btn" onclick="cloak('baldis-basics/')" href="#">Baldi's Basics</a>
+    <a class="game-btn" onclick="cloak('bitlife/')" href="#">Bitlife</a>
+    <a class="game-btn" onclick="cloak('bloonstd/')" href="#">Bloonstd</a>
+    <a class="game-btn" onclick="cloak('bloxors/')" href="#">Bloxors</a>
+    <a class="game-btn" onclick="cloak('breakout/')" href="#">Breakout</a>
+    <a class="game-btn" onclick="cloak('cars-simulator/')" href="#">Cars Simulator</a>
+    <a class="game-btn" onclick="cloak('chromedino/')" href="#">Chrome Dino</a>
+    <a class="game-btn" onclick="cloak('clean-up-io/')" href="#">Clean Up</a>
+    <a class="game-btn" onclick="cloak('core-ball/')" href="#">Core Ball</a>
+    <a class="game-btn" onclick="cloak('crossyroad/')" href="#">Crossy Road</a>
+    <a class="game-btn" onclick="cloak('cubefield/')" href="#">Cubefield</a>
+    <a class="game-btn" onclick="cloak('death-run-3d/')" href="#">Death Run</a>
+    <a class="game-btn" onclick="cloak('draw-the-hill/')" href="#">Draw The Hill</a>
+    <a class="game-btn" onclick="cloak('duck-life-treasurehunt/')" href="#">Duck Life</a>
+    <a class="game-btn" onclick="cloak('edge-surf/')" href="#">Edge Surf</a>
+    <a class="game-btn" onclick="cloak('emulator-js/')" href="#">Emulator JS</a>
+    <a class="game-btn" onclick="cloak('evilglitch/')" href="#">Evil Glitch</a>
+    <a class="game-btn" onclick="cloak('factoryballsforever/')" href="#">Factory Balls</a>
+    <a class="game-btn" onclick="cloak('flappy-2048/')" href="#">Flappy 2048</a>
+    <a class="game-btn" onclick="cloak('flappybird/')" href="#">Flappy Bird</a>
+    <a class="game-btn" onclick="cloak('geodash-2/')" href="#">Geodash</a>
+    <a class="game-btn" onclick="cloak('geometry_jump_sketchy/')" href="#">Geometry Jump</a>
+    <a class="game-btn" onclick="cloak('getaway-shootout/')" href="#">Getaway Shootout</a>
+    <a class="game-btn" onclick="cloak('golf/')" href="#">Golf</a>
+    <a class="game-btn" onclick="cloak('gunspin/')" href="#">Gunspin</a>
+    <a class="game-btn" onclick="cloak('helicopter/')" href="#">Helicopter</a>
+    <a class="game-btn" onclick="cloak('jetpack/')" href="#">Jetpack</a>
+    <a class="game-btn" onclick="cloak('justfall/')" href="#">Just Fall</a>
+    <a class="game-btn" onclick="cloak('learntofly2/')" href="#">Learn To Fly</a>
+    <a class="game-btn" onclick="cloak('line-rider/')" href="#">Line Rider</a>
+    <a class="game-btn" onclick="cloak('moto-x3m-2/')" href="#">Moto X3M</a>
+    <a class="game-btn" onclick="cloak('one-screen-run-2/')" href="#">One Screen 2</a>
+    <a class="game-btn" onclick="cloak('one-screen-run/')" href="#">One Screen</a>
+    <a class="game-btn" onclick="cloak('pacman-fps/')" href="#">Pacman FPS</a>
+    <a class="game-btn" onclick="cloak('pacman/')" href="#">Pacman</a>
+    <a class="game-btn" onclick="cloak('paperio2/')" href="#">Paperio 2</a>
+    <a class="game-btn" onclick="cloak('papery-planes/')" href="#">Papery Planes</a>
+    <a class="game-btn" onclick="cloak('rolly-vortex/')" href="#">Rolly Vortex</a>
+    <a class="game-btn" onclick="cloak('rooftop-snipers/')" href="#">Rooftop Snipers</a>
+    <a class="game-btn" onclick="cloak('run3/')" href="#">Run3</a>
+    <a class="game-btn" onclick="cloak('sand-game/')" href="#">Sand Game</a>
+    <a class="game-btn" onclick="cloak('scrapmetal/')" href="#">Scrapmetal</a>
+    <a class="game-btn" onclick="cloak('short-life-2/')" href="#">Short Life</a>
+    <a class="game-btn" onclick="cloak('smashkarts/')" href="#">Smash Karts</a>
+    <a class="game-btn" onclick="cloak('soundboard/')" href="#">Soundboard</a>
+    <a class="game-btn" onclick="cloak('spacehuggers/')" href="#">Spacehuggers</a>
+    <a class="game-btn" onclick="cloak('stick-archers-battle/')" href="#">Stick Archers</a>
+    <a class="game-btn" onclick="cloak('stickclimb/')" href="#">Stick Climb</a>
+    <a class="game-btn" onclick="cloak('stickwar/')" href="#">Stick War</a>
+    <a class="game-btn" onclick="cloak('stormthehouse2/')" href="#">Storm House</a>
+    <a class="game-btn" onclick="cloak('superhot/')" href="#">Superhot</a>
+    <a class="game-btn" onclick="cloak('swerve/')" href="#">Swerve</a>
+    <a class="game-btn" onclick="cloak('temple-run-2/')" href="#">Temple Run</a>
+    <a class="game-btn" onclick="cloak('time-shooter-3/')" href="#">Time Shooter</a>
+    <a class="game-btn" onclick="cloak('tunnel-rush/')" href="#">Tunnel Rush</a>
+    <a class="game-btn" onclick="cloak('vex3/')" href="#">Vex3</a>
+    <a class="game-btn" onclick="cloak('vex4/')" href="#">Vex4</a>
+    <a class="game-btn" onclick="cloak('vex5/')" href="#">Vex5</a>
+    <a class="game-btn" onclick="cloak('waterworks/')" href="#">Waterworks</a>
+    <a class="game-btn" onclick="cloak('worlds-hardest-game-2/')" href="#">World Hardest game 2</a>
+    <a class="game-btn" onclick="cloak('zombocalypse/')" href="#">Zombocalypse</a>
+    <a class="game-btn" onclick="cloak('newgames/paperio3d/')" href="#">Paperio3D</a>
+    <a class="game-btn" onclick="cloak('newgames/run/')" href="#">Run</a>
+    <a class="game-btn" onclick="cloak('https://valsamisphysics.com/sidescroller/index.html')" href="#">Ngon</a>
+    <a class="game-btn" onclick="cloak('https://www.stat2games.sites.grinnell.edu/games/raceradvanced22.html')" href="#">Racer</a>
+    <a class="game-btn" onclick="cloak('https://pointerpointer.com/')" href="#">Pointer Game</a>
+    <a class="game-btn" onclick="cloak('https://kids.hidabroot.org/Games/Rollingball/')" href="#">Slope 2</a>
+    <a class="game-btn" onclick="cloak('https://eurascension.s3.us-east-2.amazonaws.com/index.html')" href="#">Aircraft Sim</a>
+    <a class="game-btn" onclick="cloak('https://copilot.lindberghschools.ws/projectstorage/CopilotTheVG/index.html')" href="#">Co Pilot</a>
+    <a class="game-btn" onclick="cloak('https://home.adelphi.edu/~ju21229/assets/terrain_html/Terrain.html')" href="#">Terrain</a>
+    <a class="game-btn" onclick="cloak('https://www.drivingskillsforlife.com/media/games/vr2pc/sub/roundabout/index.html')" href="#">Driving Sim</a>
+    <a class="game-btn" onclick="cloak('https://personal.denison.edu/~lalla/314f20/juntao/index.html')" href="#">3D Ball Roll</a>
+    <a class="game-btn" onclick="cloak('https://andregaertner.com/game/')" href="#">Survival Shooting</a>
+    <a class="game-btn" onclick="cloak('https://diguifi-games.s3-us-west-2.amazonaws.com/FPS_Survival_build/index.html')" href="#">The Wanderer</a>
+    <a class="game-btn" onclick="cloak('https://kids.hidabroot.org/Games/BlastyShooting/')" href="#">Blasty Shooting</a>
+    <a class="game-btn" onclick="cloak('https://williamhoza.com/text/?t=wow%20playing%20games?')" href="#">Particle Sim</a>
+    <a class="game-btn" onclick="cloak('https://www.stat2games.sites.grinnell.edu/games/racekart.htm')" href="#">Race Kart</a>
+    <a class="game-btn" onclick="cloak('https://thegamesq2.deno.dev/slope/slope.html')" href="#">Hole.io</a>
+    <a class="game-btn" onclick="cloak('https://sigma2.wasmer.app/html/City%20Car%20Driving%20Stunt%20Master/')" href="#">stunt driving</a>
+    <a class="game-btn" onclick="cloak('https://sigma2.wasmer.app/html/Steal%20a%20Brainrot/')" href="#">steal a brainrot (works!)</a>
+ <a class="game-btn" onclick="cloak('https://sigma2.wasmer.app/html/clash%20royale/')" href="#">Clash royale</a>
+<!-- newgames -->
+    <a class="game-btn" onclick="cloak('https://sigma2.wasmer.app/html/Scary%20Teacher%203D/')" href="#">Scary Teacher 3d</a>
+    <a class="game-btn" onclick="cloak('https://a6936-19417927.cluster7.canvas-user-content.com/courses/6936~1010708/files/6936~19417927/course%20files/index.html%20tre?download=1&inline=1')" href="#">Retro Bowl</a>
+<!-- <a class="game-btn" onclick="cloak('https://a6936-20249810.cluster7.canvas-user-content.com/courses/6936~1014013/files/6936~20249810/course%20files/superhot/index.html?download=1&inline=1')" href="#">Super Hot</a> -->
+<a class="game-btn" onclick="cloak('https://www.stat2games.sites.grinnell.edu/games/tigersampling.html')" href="#">Tiger Sniper</a>
+<a class="game-btn" onclick="cloak('https://a6936-20267301.cluster7.canvas-user-content.com/courses/6936~1014013/files/6936~20267301/course%20files/baldi%20basics/index.html?download=1&inline=1')" href="#">Baldi's Basics</a>
+<a class="game-btn" onclick="cloak('https://a6936-20350029.cluster7.canvas-user-content.com/courses/6936~1014013/files/6936~20350029/course%20files/index.html?download=1&inline=1')" href="#">2 Player Slope</a>
+<a class="game-btn" onclick="cloak('https://shrikalyanika.org/play/?id=184')" href="#">Cookie Clicker (Alt)</a>
+<a class="game-btn" onclick="cloak('/CARGAME/')" href="#">Car Game</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/block%20blast/')" href="#">Block Blast</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/bottle%20flip/')" href="#">Bottle Flip</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/footballbros/')" href="#">Football Bros</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/highway%20bike%20simulator/')" href="#">Highway Bike Simulator</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/little%20alchemy%202/')" href="#">Little Alchemy 2</a>
+<a class="game-btn" onclick="cloak('https://heavenlydog3.deno.dev/html/new%20polytrack/')" href="#">Poly Track</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/ovo%203d/')" href="#">OVO 3D</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/pixel%20gun%20apocalypse%202/')" href="#">Pixel Gun Apocalypse 2</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/ragdoll%20hit/')" href="#">Ragdoll Hit</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/rocket%20soccer%20durbey/')" href="#">Rocket Soccer Derby</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/sandtris/')" href="#">Sandtris</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/save%20the%20doge/')" href="#">Save the Doge</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/soccer%20skills%20euro%20cup/')" href="#">Soccer Skills Euro Cup</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/stick%20duel%20battle/')" href="#">Stick Duel Battle</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/stick%20fighters/')" href="#">Stick Fighters</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/stickman%20bike/')" href="#">Stickman Bike</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/top%20speed%20racing%203d/')" href="#">Top Speed Racing 3D</a>
+<a class="game-btn" onclick="cloak('https://sigma3.deno.dev/html/worlds%20hardest%20game%203/')" href="#">World's Hardest Game 3</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/basketbros.io/')" href="#">basketbros.io</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/basket%20legend%202020/')" href="#">basketballlegends.2020</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/burrito%20bison/')" href="#">burritobison.io</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/cannon%20basketball/')" href="#">cannonbasketball</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/block%20shooter%20frenzy/')" href="#">blockshooterfrenzy</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/ultimate%20offroad%20simulator/')" href="#">offroadsimulator</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/pixelshooter/')" href="#">pixelshooter</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/superfighters/')" href="#">superfighters</a>
+<a class="game-btn" onclick="cloak('https://candycrush.wasmer.app/html/top%20speed%203d/')" href="#">topspeed3D</a>
+<a class="game-btn" onclick="cloak(' https://candycrush.wasmer.app/html/tap%20tap%20shots/')" href="#">tap-tap-shots</a>
+
+ 
+
+ 
+</div>
+<table>
+    <tr>
+        <td></td>
+                <td>
+                    
+                    <script src="https://cdn.commoninja.com/sdk/latest/commonninja.js" defer></script>
+<div class="commonninja_component pid-8665edcf-34a5-46fd-b694-3a5e4a4f9882"></div>
+
+                    
+                </td>
+        <td></td>
+
+        
+    </tr>
+    
+    
+    
+</table>
+
+
+</div>
+
+    
+    </div>
+</div>
+</body>
+</html>
 
 </body>
 </html>
