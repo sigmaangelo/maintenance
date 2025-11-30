@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Cloaked Access</title>
+<title>Cloaked Entry</title>
 <style>
   body { background:white; font-family:Arial; text-align:center; margin-top:100px; }
 </style>
@@ -27,9 +27,9 @@ function cloak() {
 
       <script>
       async function login() {
-        const p = document.getElementById('pass').value;
+        const entered = document.getElementById('pass').value;
 
-        if (p !== "${PASSWORD}") {
+        if (entered !== "${PASSWORD}") {
             document.getElementById('msg').innerText = "Wrong password";
             return;
         }
@@ -44,12 +44,22 @@ function cloak() {
             return;
         }
 
-        // Cloaked navigation
-        window.location.href = "/games.html";
+        // OPEN games.html CLOAKED
+        let g = window.open("about:blank", "_blank");
+        let iframe = g.document.createElement("iframe");
 
+        iframe.src = "/games.html"; 
+        iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
+
+        g.document.body.style.margin = 0;
+        g.document.body.appendChild(iframe);
+
+        // OPTIONAL: Close login window
+        window.close();
       }
       <\/script>
     `);
+
     win.document.close();
 }
 </script>
