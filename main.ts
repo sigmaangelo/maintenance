@@ -34,7 +34,8 @@ serve(async (req) => {
   }
 
   // ===============================
-  // PROTECTION RULES
+  // PROTECTION RULES ONLY
+  // (No hotlink / no origin restrictions)
   // ===============================
 
   // Protect index.html
@@ -42,7 +43,7 @@ serve(async (req) => {
     if (!authenticated) return new Response("403 Forbidden", { status: 403 });
   }
 
-  // Protect games + /games/
+  // Protect games and /games/
   if (
     path === "/games.html" ||
     path === "/games" ||
@@ -51,7 +52,7 @@ serve(async (req) => {
     if (!authenticated) return new Response("403 Forbidden", { status: 403 });
   }
 
-  // Protect the entire /tools/ folder
+  // Protect /tools/
   if (path.startsWith("/tools/")) {
     if (!authenticated) return new Response("403 Forbidden", { status: 403 });
   }
@@ -61,7 +62,6 @@ serve(async (req) => {
   // ===============================
   let filePath = "." + (path === "/" ? "/index.html" : path);
 
-  // serve /folder/ → /folder/index.html
   if (filePath.endsWith("/")) filePath += "index.html";
 
   try {
