@@ -13,9 +13,7 @@ function isRipper(req: Request) {
   if (origin === "" && !referer.includes("http")) return true;
 
   // Allowed legit domain
-  const allowed = [
-    "https://maintenance.deno.dev/",
-  ];
+
 
   // Not from allowed origin = rip attempt
   if (!allowed.includes(origin)) return true;
