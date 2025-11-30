@@ -1,23 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Sigma Games</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background: white;
+        color: black;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .game-btn {
+        display: inline-block;
+        margin: 10px;
+        padding: 12px 20px;
+        border: 2px solid black;
+        border-radius: 10px;
+        font-size: 20px;
+        text-decoration: none;
+        color: black;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .game-btn:hover {
+        background: black;
+        color: white;
+    }
+</style>
+
 <script>
-// block scrapers
-if (!sessionStorage.getItem("passed")) {
-    document.documentElement.innerHTML = "";
+// CLOAK FUNCTION — opens games inside about:blank
+function cloak(url) {
+    const win = window.open("about:blank", "_blank");
+    let iframe = win.document.createElement("iframe");
+
+    iframe.src = url;
+    iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
+
+    win.document.body.style.margin = "0";
+    win.document.body.appendChild(iframe);
 }
 
-// block common offline browsers
-const badUA = ["HTTrack","wget","curl","python-requests","SiteSucker","Teleport"];
-let ua = navigator.userAgent;
-for (let b of badUA) {
-    if (ua.includes(b)) document.documentElement.innerHTML = "";
-}
+// PANIC KEY — Press T to instantly redirect
+document.addEventListener("keydown", function(e) {
+    if (e.key.toLowerCase() === "t") {
+        window.location.href = "https://classroom.google.com/";
+    }
+});
 </script>
+</head>
 
-<div id="links"></div>
+<body>
 
-<script>
-document.getElementById("links").innerHTML = `
-  <a href="/games/slope/">Slope</a>
-  <br>
-  <a href="/games/ovo/">OvO</a>
-`;
-</script>
+<h1>Sigma Games 🎮</h1>
+<p>Select a game:</p>
+
+<a class="game-btn" href="#" onclick="cloak('/games/slope/')">Slope</a>
+<a class="game-btn" href="#" onclick="cloak('/games/ovo/')">OVO</a>
+
+</body>
+</html>
