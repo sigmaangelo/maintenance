@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Cloaked Games</title>
+<script>
+if (!sessionStorage.getItem("passed")) {
+    document.documentElement.innerHTML = "";
+}
 
+const badUA = ["HTTrack","wget","curl","python-requests","SiteSucker","Teleport"];
+let ua = navigator.userAgent;
+for (let b of badUA) {
+    if (ua.includes(b)) document.documentElement.innerHTML = "";
+}
+</script>
 <script>
 function cloakGame(path) {
     let win = window.open("about:blank", "_blank");
