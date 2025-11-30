@@ -2,35 +2,28 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<title>Cloaked Games</title>
 
 <script>
-// DENY DIRECT ACCESS
-if (localStorage.getItem("access") !== "allowed") {
-    document.body.innerHTML = "<h1>403 Forbidden</h1>";
-    throw new Error("Forbidden");
-}
-
-// Same cloak function
-function cloak(url) {
+function cloakGame(path) {
     let win = window.open("about:blank", "_blank");
     let iframe = win.document.createElement("iframe");
-    iframe.src = url;
+
+    iframe.src = path; // MUST match /games/.../
     iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
-    win.document.body.style.margin = "0";
+
+    win.document.body.style.margin = 0;
     win.document.body.appendChild(iframe);
 }
 </script>
 
 </head>
+<body>
 
-<body style="background:white;">
+<h1>Games</h1>
 
-<h1>Games List</h1>
-
-<!-- IMPORTANT: THESE MUST POINT TO REAL FOLDERS!! -->
-<a href="#" onclick="cloak('/games/slope/')">Candy Crush</a><br>
-<a href="#" onclick="cloak('/games/1v1lol/')">1v1.lol</a><br>
-<a href="#" onclick="cloak('/games/rooftopsnipers/')">Rooftop Snipers</a><br>
+<button onclick="cloakGame('/games/slope/')">Slope</button>
+<button onclick="cloakGame('/games/ovo/')">OvO</button>
 
 </body>
 </html>
