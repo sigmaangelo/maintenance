@@ -4,73 +4,55 @@
 <meta charset="UTF-8">
 <title>Cloaked Access</title>
 <style>
-  body { background:white; color:black; text-align:center; padding-top:80px; font-family:Arial; }
-  button,input { padding:10px; font-size:18px; margin:5px; }
+  body { background:white; font-family:Arial; text-align:center; margin-top:100px; }
 </style>
-<script>
-function startCloak() {
-  let win = window.open("about:blank", "_blank");
+</head>
 
-  win.document.open();
-  win.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>Password</title>
-      <style>
-        body { background:white; color:black; text-align:center; padding-top:80px; font-family:Arial; }
-        button,input { padding:10px; font-size:18px; margin:5px; }
-      </style>
+<body>
+
+<h1>Press to Cloak</h1>
+<button onclick="cloak()">CLOAK</button>
+
+<script>
+const PASSWORD = "1234";
+
+function cloak() {
+    let win = window.open("about:blank", "_blank");
+
+    win.document.write(`
+      <h2>Enter Password</h2>
+      <input id="pass" type="password" />
+      <button onclick="login()">Enter</button>
+      <p id='msg'></p>
 
       <script>
       async function login() {
-        const pw = document.getElementById("pw").value;
+        const p = document.getElementById('pass').value;
 
-        const res = await fetch("/login", {
-          method: "POST",
-          headers: { "Content-Type":"application/json" },
-          body: JSON.stringify({ password: pw })
-        });
-
-        if (!res.ok) {
-          document.getElementById("msg").textContent = "Incorrect password";
-          return;
+        if (p !== "${PASSWORD}") {
+            document.getElementById('msg').innerText = "Wrong password";
+            return;
         }
 
-        // SUCCESS → CLOAK games.html
-        let newWin = window.open("about:blank", "_blank");
-        let iframe = newWin.document.createElement("iframe");
-        iframe.src = "/games.html";
-        iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
-        newWin.document.body.style.margin = "0";
-        newWin.document.body.appendChild(iframe);
+        const fd = new FormData();
+        fd.append("password", "${PASSWORD}");
 
-        // Close the login tab
-        window.close();
+        const res = await fetch("/login", { method:"POST", body:fd });
+
+        if (!res.ok) {
+            document.getElementById('msg').innerText = "Server rejected";
+            return;
+        }
+
+        // Cloaked navigation
+        window.location.href = "/games.html";
+
       }
-
-      document.addEventListener("keydown", e => { if (e.key === "Enter") login(); });
       <\/script>
-
-    </head>
-    <body>
-      <h1>Enter Password</h1>
-      <input id="pw" type="password" placeholder="Password">
-      <button onclick="login()">Submit</button>
-      <p id="msg"></p>
-    </body>
-    </html>
-  `);
-
-  win.document.close();
+    `);
+    win.document.close();
 }
 </script>
-</head>
-<body>
-
-<h1>CLOAKED PORTAL</h1>
-<button onclick="startCloak()">ENTER</button>
 
 </body>
 </html>
