@@ -9,42 +9,52 @@ serve(async (req) => {
   const cookies = req.headers.get("cookie") || "";
   const authenticated = cookies.includes("auth=1");
 
-  // Protect all games
-  if ((path === "/games" || path.startsWith("/games/")) && !authenticated) {
+  console.log("Request:", path);
+
+  // 🔒 BLOCK games.html unless logged in
+  if (path === "/games.html" && !authenticated) {
     return new Response("403 Forbidden", { status: 403 });
   }
 
-  // Handle login
-  if (path === "/login" && req.method === "POST") {
-    const fd = await req.formData();
-    const pass = fd.get("password");
+  // 🔒 BLOCK all /games/ folders unless logged in
+  if (path.startsWith("/games/") && !authenticated) {
+    return new Response("403 Forbidden", { status: 403 });
+  }
 
-    if (pass === PASSWORD) {
+  // 🔐 LOGIN ENDPOINT
+  if (path === "/login" && req.method === "POST") {
+    const form = await req.formData();
+    const password = form.get("password");
+
+    if (password === PASSWORD) {
       return new Response("OK", {
-        headers: { "Set-Cookie": "auth=1; Path=/;" }
+        headers: {
+          "Set-Cookie": "auth=1; HttpOnly; Path=/",
+        },
       });
     }
     return new Response("WRONG", { status: 401 });
   }
 
-  // Serve files
-  let filePath = path === "/" ? "./index.html" :
-                 path.endsWith("/") ? `.${path}index.html` :
-                 `.${path}`;
+  // 📄 SERVE FILES
+  const filePath = path.endsWith("/") ? `.${path}index.html` : `.${path}`;
 
   try {
     const file = await Deno.readFile(filePath);
     return new Response(file, {
-      headers: { "content-type": getType(filePath) }
+      headers: { "content-type": getType(filePath) },
     });
   } catch {
     return new Response("404 Not Found", { status: 404 });
   }
 });
 
-function getType(path: string) {
+// MIME helper
+function getType(path) {
   if (path.endsWith(".html")) return "text/html";
-  if (path.endsWith(".css")) return "text/css";
   if (path.endsWith(".js")) return "application/javascript";
+  if (path.endsWith(".css")) return "text/css";
+  if (path.endsWith(".png")) return "image/png";
+  if (path.endsWith(".jpg")) return "image/jpeg";
   return "text/plain";
 }
