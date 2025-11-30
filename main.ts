@@ -1,25 +1,19 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
-const PASSWORD = "1234";
+// ----------------------------
+// CONFIG
+// ----------------------------
+const PASSWORD = "1234"; // change this
 
-// ----------------------------------
-// PROTECT INDEX.HTML FROM RIPPERS
-// ----------------------------------
-function isRipper(req: Request) {
-  const referer = req.headers.get("referer") || "";
-  const origin = req.headers.get("origin") || "";
-
-  // Someone running file:// or opened directly
-  if (origin === "" && !referer.includes("http")) return true;
-
-  // Allowed legit domain
-
-
-  // Not from allowed origin = rip attempt
-  if (!allowed.includes(origin)) return true;
-
-  return false;
-}
+// Allowed public files (no login needed)
+const PUBLIC_FILES = new Set([
+  "/encrypt.html",
+  "/ip.html",
+  "/passgen.html",
+  "/ping.html",
+  "/ports.html",
+  "/proxy.html"
+]);
 
 serve(async (req) => {
   const url = new URL(req.url);
@@ -30,21 +24,28 @@ serve(async (req) => {
 
   console.log("Request:", path, "Auth:", authenticated);
 
-  // -----------------------------------------
-  // BLOCK RIPPER ACCESS TO INDEX.HTML
-  // -----------------------------------------
+  // ----------------------------------------------------
+  // BLOCK INDEX.html FOR ANYONE WHO IS NOT AUTHENTICATED
+  // ----------------------------------------------------
   if (path === "/" || path === "/index.html") {
-    if (isRipper(req)) {
+    if (!authenticated) {
       return new Response("403 Forbidden", { status: 403 });
     }
   }
 
-  // -----------------------------------------
-  // PROTECT /games and /games.html
-  // -----------------------------------------
+  // ----------------------------------------------------
+  // PUBLIC TOOLS — ALWAYS ALLOWED
+  // ----------------------------------------------------
+  if (PUBLIC_FILES.has(path)) {
+    return serveFile(path);
+  }
+
+  // ----------------------------------------------------
+  // PROTECT /games AND EVERYTHING INSIDE IT
+  // ----------------------------------------------------
   if (
-    path === "/games.html" ||
     path === "/games" ||
+    path === "/games.html" ||
     path.startsWith("/games/")
   ) {
     if (!authenticated) {
@@ -52,9 +53,9 @@ serve(async (req) => {
     }
   }
 
-  // -----------------------------------------
-  // LOGIN SETS AUTH COOKIE
-  // -----------------------------------------
+  // ----------------------------------------------------
+  // LOGIN ENDPOINT
+  // ----------------------------------------------------
   if (path === "/login" && req.method === "POST") {
     const form = await req.formData();
     const input = form.get("password");
@@ -70,14 +71,19 @@ serve(async (req) => {
     return new Response("WRONG", { status: 401 });
   }
 
-  // -----------------------------------------
-  // SERVE FILES
-  // -----------------------------------------
+  // ----------------------------------------------------
+  // SERVE OTHER FILES
+  // ----------------------------------------------------
+  return serveFile(path);
+});
+
+// ----------------------------
+// SERVE FILE UTILITY
+// ----------------------------
+async function serveFile(path: string) {
   let filePath = "." + (path === "/" ? "/index.html" : path);
 
-  if (filePath.endsWith("/")) {
-    filePath += "index.html";
-  }
+  if (filePath.endsWith("/")) filePath += "index.html";
 
   try {
     const file = await Deno.readFile(filePath);
@@ -89,11 +95,11 @@ serve(async (req) => {
   } catch {
     return new Response("404 Not Found", { status: 404 });
   }
-});
+}
 
-// -----------------------------------------
+// ----------------------------
 // MIME TYPES
-// -----------------------------------------
+// ----------------------------
 function getType(path: string): string {
   if (path.endsWith(".html")) return "text/html";
   if (path.endsWith(".js")) return "application/javascript";
