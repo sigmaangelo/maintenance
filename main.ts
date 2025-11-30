@@ -32,14 +32,6 @@ serve(async (req) => {
 
 
 // PROTECT index.html
-if (
-  path === "/" ||
-  path === "/index.html"
-) {
-  if (!authenticated) {
-    return new Response("403 Forbidden", { status: 403 });
-  }
-}
 
 
  
