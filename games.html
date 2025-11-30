@@ -15,56 +15,26 @@
         win.document.body.appendChild(iframe);
     }
 
-    // PANIC KEY (T)
-    document.addEventListener("keydown", function(e) {
-        if (e.key.toLowerCase() === "t") {
-            window.location.href = "https://classroom.mcpsmd.org/";
-        }
-    });
-
-    // PASSWORD GATE
-    function unlock() {
-        let p = document.getElementById("pw").value;
-        if (p === "1234") {
-            document.getElementById("lock").style.display = "none";
-            document.getElementById("content").style.display = "block";
-            localStorage.setItem("unlocked", "true");
-        } else {
-            alert("Wrong passcode");
-        }
-    }
-
-    window.onload = () => {
-        if (localStorage.getItem("unlocked") === "true") {
-            document.getElementById("lock").style.display = "none";
-            document.getElementById("content").style.display = "block";
-        }
-    };
+ 
 </script>
 
 </head>
 
 <body style="background:white;">
 
-<!-- PASSWORD SCREEN -->
-<div id="lock">
-    <h2>Enter Passcode</h2>
-    <input id="pw" type="password">
-    <button onclick="unlock()">Enter</button>
-</div>
+<!-- When clicking Slope, it loads inside iframe -->
+<button onclick="play('slope')">Play Slope</button>
+<a class="game-btn" onclick="cloak('slope/')" href="#">Papery Planes</a>
 
-<!-- MAIN CONTENT (Hidden until unlocked) -->
-<div id="content" style="display:none;">
 
-<h1>Sigma Games 🎮🗿</h1>
-<p>Thanksgiving Update!</p>
+<iframe id="gameFrame" style="width:800px;height:600px;border:none;margin-top:20px;"></iframe>
 
-<!-- GAME BUTTONS -->
-<a href="#" onclick="cloak('/games/slope/')">Candy Crush</a><br>
-<a href="#" onclick="cloak('/games/1v1lol/')">1v1.lol</a><br>
-<a href="#" onclick="cloak('/games/getaway-shootout/')">Getaway Shootout</a><br>
-<a href="#" onclick="cloak('/games/rooftopsnipers/')">Rooftop Snipers</a><br>
-
+<script>
+function play(game) {
+  const iframe = document.getElementById("gameFrame");
+  iframe.src = `/games/${game}/index.html`; // loads the game
+}
+</script>
 </div>
 
 </body>
