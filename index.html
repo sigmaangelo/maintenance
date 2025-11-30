@@ -1,90 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-  
-<title>Start - Cloak</title>
+<meta charset="UTF-8">
+<title>Cloak</title>
 <style>
-  body { background: white; color: black; font-family: Arial, sans-serif; text-align:center; padding-top:100px; }
-  button, input { padding:10px 14px; font-size:16px; margin-top:10px; }
+  body {
+    background:#fff;
+    color:#000;
+    text-align:center;
+    padding-top:100px;
+    font-family:Arial;
+  }
+  button {
+    font-size:22px;
+    padding:15px 30px;
+    cursor:pointer;
+  }
 </style>
 </head>
+
 <body>
-  <h1>CLOAK MODE</h1>
-  <button id="cloakBtn">CLOAK</button>
+<h1>CLOAKED ACCESS</h1>
+<button onclick="cloak()">ENTER</button>
 
 <script>
-const PASSWORD = "1234"; // change to match main.ts
-
-document.getElementById("cloakBtn").addEventListener("click", () => {
-  // open a new about:blank tab and write the cloaked UI into it
+function cloak() {
   const win = window.open("about:blank", "_blank");
-  if (!win) {
-    alert("Popup blocked — allow popups for this site");
-    return;
-  }
 
-  // Write the cloaked UI. Important: writing into about:blank this way gives the new document the same origin
-  // as the opener so fetch() and cookies work.
   win.document.open();
   win.document.write(`
-    <!doctype html>
+    <!DOCTYPE html>
     <html>
     <head>
-      <meta charset="utf-8" />
-      <title>Cloaked</title>
+      <meta charset="UTF-8">
+      <title>Login</title>
       <style>
-        body { background:white; color:black; font-family: Arial, sans-serif; text-align:center; padding-top:80px; }
-        input, button { padding:10px 14px; font-size:16px; margin-top:10px; }
+        body {
+          background:#fff;
+          color:#000;
+          text-align:center;
+          padding-top:100px;
+          font-family:Arial;
+        }
+        input,button {
+          padding:10px;
+          margin:8px;
+          font-size:18px;
+        }
       </style>
     </head>
+
     <body>
-      <h2>Enter Passcode</h2>
-      <input id="pass" type="password" placeholder="pass" />
-      <br/>
-      <button id="enterBtn">ENTER</button>
-      <p id="msg" style="color:red"></p>
+      <h1>Enter Password</h1>
+      <input id="pw" type="password" placeholder="Password">
+      <br>
+      <button onclick="login()">Submit</button>
+      <p id="msg"></p>
 
       <script>
-        // login function that POSTs to /login and then navigates this cloaked window to /games.html
-        async function doLogin() {
-          const pass = document.getElementById('pass').value;
+      async function login() {
+        const pw = document.getElementById("pw").value;
 
-          // Basic client-side quick-check (optional)
-          if (!pass) {
-            document.getElementById('msg').textContent = 'Enter password';
-            return;
-          }
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ password: pw })
+        });
 
-          const form = new FormData();
-          form.append('password', pass);
-
-          try {
-            const res = await fetch('/login', { method: 'POST', body: form });
-            if (!res.ok) {
-              document.getElementById('msg').textContent = 'Wrong password';
-              return;
-            }
-
-            // success — cookie set by server in response; now navigate this cloaked tab to protected page
-            // THIS navigation stays in this cloaked tab and will include the cookie
-            window.location.href = '/games.html';
-          } catch (err) {
-            document.getElementById('msg').textContent = 'Network error';
-            console.error(err);
-          }
+        if (!res.ok) {
+          document.getElementById("msg").textContent = "Wrong password";
+          return;
         }
 
-        document.getElementById('enterBtn').addEventListener('click', doLogin);
-        document.getElementById('pass').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') doLogin();
-        });
+        // Correct password → navigate to games.html inside cloak tab
+        location.href = "/games.html";
+      }
+
+      document.getElementById("pw").addEventListener("keydown", e => {
+        if (e.key === "Enter") login();
+      });
       <\/script>
     </body>
     </html>
   `);
+
   win.document.close();
-});
+}
 </script>
+
 </body>
 </html>
