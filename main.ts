@@ -1,35 +1,3 @@
-// ===========================
-// 🔒 ANTI-RIPPER PROTECTION
-// ===========================
-(function () {
-    if (location.protocol === "file:") {
-        document.body.innerHTML = "";
-        alert("This site cannot be run locally.");
-        return;
-    }
-
-    const allowed = ["yourdomain.com", "www.yourdomain.com"];
-
-    if (!allowed.includes(location.hostname)) {
-        document.body.innerHTML = "";
-        console.clear();
-        alert("Unauthorized copy detected.");
-        return;
-    }
-
-    document.addEventListener("contextmenu", e => e.preventDefault());
-
-    document.addEventListener("keydown", e => {
-        if (
-            e.key === "F12" ||
-            (e.ctrlKey && e.key.toLowerCase() === "u") ||
-            (e.ctrlKey && e.key.toLowerCase() === "s") ||
-            (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i")
-        ) {
-            e.preventDefault();
-        }
-    });
-})();
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
