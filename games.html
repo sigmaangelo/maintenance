@@ -1,17 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>Games</title>
-<style>
-  body { background:white; color:black; font-family: Arial, sans-serif; padding:40px; }
-  a { display:block; margin:12px 0; font-size:18px; }
-</style>
+<meta charset="UTF-8">
+<title>SigmaGames</title>
+
+<script>
+    // CLOAK FUNCTION (Works for all games)
+    function cloak(url) {
+        let win = window.open("about:blank", "_blank");
+        let iframe = win.document.createElement("iframe");
+        iframe.src = url; // must be correct folder path
+        iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
+        win.document.body.style.margin = "0";
+        win.document.body.appendChild(iframe);
+    }
+
+    // PANIC KEY (T)
+    document.addEventListener("keydown", function(e) {
+        if (e.key.toLowerCase() === "t") {
+            window.location.href = "https://classroom.mcpsmd.org/";
+        }
+    });
+
+    // PASSWORD GATE
+    function unlock() {
+        let p = document.getElementById("pw").value;
+        if (p === "1234") {
+            document.getElementById("lock").style.display = "none";
+            document.getElementById("content").style.display = "block";
+            localStorage.setItem("unlocked", "true");
+        } else {
+            alert("Wrong passcode");
+        }
+    }
+
+    window.onload = () => {
+        if (localStorage.getItem("unlocked") === "true") {
+            document.getElementById("lock").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }
+    };
+</script>
+
 </head>
-<body>
-  <h1>Games</h1>
-  <a href="/games/slope/">Slope</a>
-  <a href="/games/ovo/">OvO</a>
-  <a href="/games/bitplanes/">Bit Planes</a>
+
+<body style="background:white;">
+
+<!-- PASSWORD SCREEN -->
+<div id="lock">
+    <h2>Enter Passcode</h2>
+    <input id="pw" type="password">
+    <button onclick="unlock()">Enter</button>
+</div>
+
+<!-- MAIN CONTENT (Hidden until unlocked) -->
+<div id="content" style="display:none;">
+
+<h1>Sigma Games 🎮🗿</h1>
+<p>Thanksgiving Update!</p>
+
+<!-- GAME BUTTONS -->
+<a href="#" onclick="cloak('/games/slope/')">Candy Crush</a><br>
+<a href="#" onclick="cloak('/games/1v1lol/')">1v1.lol</a><br>
+<a href="#" onclick="cloak('/games/getaway-shootout/')">Getaway Shootout</a><br>
+<a href="#" onclick="cloak('/games/rooftopsnipers/')">Rooftop Snipers</a><br>
+
+</div>
+
 </body>
 </html>
