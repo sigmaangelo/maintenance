@@ -22,9 +22,10 @@ serve(async (req) => {
   }
 
   // ---------------------------------------
-  // PROTECT GAMES
+  // PROTECT HOME + GAMES
   // ---------------------------------------
   if (
+    path === "/home.html" ||     // <--- NEW PROTECTION
     path === "/games.html" ||
     path === "/games" ||
     path.startsWith("/games/")
@@ -41,7 +42,6 @@ serve(async (req) => {
     const ua = req.headers.get("user-agent") || "";
     const accept = req.headers.get("accept") || "";
 
-    // allow REAL browsers to view normally
     const looksBrowser =
       ua.includes("Chrome") ||
       ua.includes("Firefox") ||
