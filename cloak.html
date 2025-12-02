@@ -1,30 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Password</title>
-  <style>
-    body { background: white; font-family: Arial; text-align: center; padding-top: 80px; }
-    input { font-size: 22px; padding: 10px; }
-    button { padding: 10px 20px; font-size: 22px; cursor: pointer; }
-  </style>
+<meta charset="UTF-8">
+<title>Cloaking...</title>
 </head>
-<body>
+<body style="background:white; font-family:Arial; text-align:center; margin-top:120px;">
 
-  <h2>Enter Passcode</h2>
+<h2>Launching secure cloaked window...</h2>
 
-  <input type="password" id="pass">
-  <button onclick="checkPass()">Submit</button>
+<script>
+const PASSWORD = "ᎤᏇᏕ1Ꮭ0ᎧᏰᎧᎥᏬᎩᏖᏒᎴ";
 
-  <script>
-    function checkPass() {
-      if (document.getElementById("pass").value === "1234") {
-        window.location.href = "home.html";
-      } else {
-        alert("Incorrect Password");
-      }
-    }
-  </script>
+(function startCloak() {
+    let win = window.open("about:blank", "_blank");
+
+    win.document.write(`
+    <html><head>
+      <style>
+        body {
+          background: #0d0d0d;
+          color: white;
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+        .box {
+          background: #1a1a1a;
+          padding: 30px;
+          border-radius: 12px;
+          width: 300px;
+          text-align: center;
+          box-shadow: 0 0 20px rgba(0,0,0,0.5);
+          border: 1px solid #333;
+        }
+        input {
+          width: 90%;
+          padding: 12px;
+          margin-top: 10px;
+          border-radius: 8px;
+          border: none;
+          background: #333;
+          color: white;
+          font-size: 16px;
+        }
+        button {
+          margin-top: 15px;
+          padding: 12px 20px;
+          width: 100%;
+          background: #4caf50;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 16px;
+          cursor: pointer;
+        }
+        #msg { margin-top: 10px; color: #ff5252; }
+      </style>
+    </head>
+
+    <body>
+      <div class="box">
+        <h2>Enter Password</h2>
+        <input id="pass" type="password" placeholder="Password..." />
+        <button onclick="login()">Enter</button>
+        <p id="msg"></p>
+      </div>
+
+      <script>
+        async function login() {
+          const pass = document.getElementById('pass').value;
+
+          if (pass !== "${PASSWORD}") {
+            document.getElementById('msg').textContent = "Incorrect password";
+            return;
+          }
+
+          // Open cloaked final window
+          let g = window.open("about:blank", "_blank");
+          let iframe = g.document.createElement("iframe");
+
+          iframe.src = "/home.html"; 
+          iframe.style = "position:fixed; top:0; left:0; width:100%; height:100%; border:none;";
+          
+          g.document.body.style.margin = 0;
+          g.document.body.appendChild(iframe);
+
+          // Close login tab
+          window.close();
+        }
+      <\/script>
+    </body></html>
+    `);
+
+    win.document.close();
+})();
+</script>
 
 </body>
 </html>
